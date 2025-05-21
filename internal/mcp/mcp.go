@@ -1,8 +1,11 @@
 package mcp
 
 import (
+	"regexp"
 	"strings"
 )
+
+var argPattern = regexp.MustCompile(`(\w+)=(".*?"|\S+)`)
 
 type Message struct {
 	Tag  string
@@ -28,15 +31,15 @@ func Parse(line string) (*Message, error) {
 func parseArgs(input string) map[string]string {
 
 	args := make(map[string]string)
-	tokens := strings.Fields(input)
+	matches := argPattern.FindAllStringSubmatch(input, -1)
 
-	for _, token := range tokens {
-		parts := strings.SplitN(token, "=", 2)
-		if len(parts) == 2 {
-			key := parts[0]
-			value := strings.Trim(parts[1], `"`)
-			args[key] = value
+	for _, match := range matches {
+		key := match[1]
+		value := match[2]
+		if strings.HasPrefix(value, `"`) && strings.HasSuffix(value, `"`) {
+			value = strings.Trim(value, `"`)
 		}
+		args[key] = value
 	}
 
 	return args

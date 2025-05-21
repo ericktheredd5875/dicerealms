@@ -1,8 +1,12 @@
 package server
 
 import (
+	"bufio"
+	"fmt"
 	"log"
 	"net"
+
+	"github.com/ericktheredd5875/dicerealms/internal/mcp"
 )
 
 func Start(addr string) error {
@@ -35,4 +39,31 @@ func handleConnection(conn net.Conn) {
 
 	conn.Write([]byte("Welcome to DiceRealms!\n"))
 
+	scanner := bufio.NewScanner(conn)
+	for scanner.Scan() {
+		line := scanner.Text()
+		log.Printf("Received: %s", line)
+
+		msg, err := mcp.Parse(line)
+		if err != nil {
+			log.Printf("Error parsing message: %v", err)
+			continue
+		}
+
+		if msg == nil {
+			// Not an MCP message, treat as plain text
+			conn.Write([]byte("Echo: " + line + "\n"))
+			continue
+		}
+
+		// For now, just log the parsed MCP message
+		log.Printf("Parsed MCP: tag=%s args=%v", msg.Tag, msg.Args)
+
+		// Later: Route MCP commands to appropriate handlers
+		conn.Write([]byte(fmt.Sprintf("Received MCP command: %s\n", msg.Tag)))
+	}
+
+	if err := scanner.Err(); err != nil {
+		log.Printf("Connection error: %v", err)
+	}
 }
