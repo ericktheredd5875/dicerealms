@@ -1,0 +1,75 @@
+name: CI
+
+on:
+    push:
+        branches: [main]
+    pull_request:
+        branches: [main]
+
+jobs:
+    test:
+        runs-on: ubuntu-latest
+
+        services:
+            postgres:
+                image: postgres:17
+                ports:
+                    - 5432:5432
+                env:
+                    POSTGRES_USER: dicerealms
+                    POSTGRES_PASSWORD: dicerealms
+                    POSTGRES_DB: dicerealms_test
+                options: >-
+                    --health-cmd "pg_isready -U dicerealms -d dicerealms_test"
+                    --health-interval 10s
+                    --health-timeout 5s
+                    --health-retries 5
+
+        env:
+            URL: localhost
+            PORT: 8080
+            MIGRATION_PATH: ../../db/migrations
+            DATABASE_URL: "postgres://dicerealms:dicerealms@localhost:5432/dicerealms?sslmode=disable"
+            TEST_DATABASE_URL: "postgres://dicerealms:dicerealms@localhost:5432/dicerealms_test?sslmode=disable"
+            ASSERT_ROOT_DIR: "/home/runner/work/dicerealms-backend/dicerealms-backend"
+        steps:
+            - name: Checkout Code
+              uses: actions/checkout@v4
+
+            - name: Set up Go
+              uses: actions/setup-go@v5
+              with:
+                go-version: 1.23.x
+
+            - name: Cache Go modules
+              uses: actions/cache@v3
+              with:
+                path: |
+                  ~/.cache/go-build
+                  ~/go/pkg/mod
+                key: ${{ runner.os }}-go-${{ hashFiles('**/go.sum') }}
+                restore-keys: |
+                  ${{ runner.os }}-go-
+
+            - name: Wait for DB to be ready
+              run: |
+                echo "Waiting for Postgres to be ready..."
+                sleep 10
+            
+            - name: Tidy Modules
+              run: go mod tidy
+
+            - name: Install migrate CLI
+              run: |
+                curl -L https://github.com/golang-migrate/migrate/releases/download/v4.18.3/migrate.linux-amd64.tar.gz | tar xvz
+                sudo mv migrate /usr/local/bin/
+
+            - name: Run Tests via Makefile
+              run: make coverage-show
+
+            - name: Upload Coverage
+              uses: codecov/codecov-action@v5
+              with:
+                token: ${{ secrets.CODECOV_TOKEN }}
+                flags: unittests
+              

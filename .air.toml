@@ -1,0 +1,22 @@
+# .air.toml — config for air live reloading
+
+root = "."
+tmp_dir = "tmp"
+
+[build]
+  cmd = "go build -o tmp/main.exe ./cmd/server"
+  bin = "tmp/main.exe"
+  shell = "bash"
+  delay = 1000
+  exclude_dir = ["tmp", "bin"]
+  include_ext = ["go", "tpl", "tmpl", "html"]
+  exclude_file = ["_test.go"]
+
+[log]
+  time = true
+
+[color]
+  main = "yellow"
+  watcher = "cyan"
+  build = "green"
+  runner = "magenta"
