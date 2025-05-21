@@ -25,13 +25,13 @@ jobs:
                     --health-timeout 5s
                     --health-retries 5
 
-        env:
-            URL: localhost
-            PORT: 8080
-            MIGRATION_PATH: ../../db/migrations
-            DATABASE_URL: "postgres://dicerealms:dicerealms@localhost:5432/dicerealms?sslmode=disable"
-            TEST_DATABASE_URL: "postgres://dicerealms:dicerealms@localhost:5432/dicerealms_test?sslmode=disable"
-            ASSERT_ROOT_DIR: "/home/runner/work/dicerealms-backend/dicerealms-backend"
+        # env:
+        #     URL: localhost
+        #     PORT: 8080
+        #     MIGRATION_PATH: ../../db/migrations
+        #     DATABASE_URL: "postgres://dicerealms:dicerealms@localhost:5432/dicerealms?sslmode=disable"
+        #     TEST_DATABASE_URL: "postgres://dicerealms:dicerealms@localhost:5432/dicerealms_test?sslmode=disable"
+        #     ASSERT_ROOT_DIR: "/home/runner/work/dicerealms-backend/dicerealms-backend"
         steps:
             - name: Checkout Code
               uses: actions/checkout@v4
