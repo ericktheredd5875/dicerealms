@@ -13,7 +13,7 @@ type Message struct {
 }
 
 func Parse(line string) (*Message, error) {
-	if !strings.HasPrefix(line, "#$#") {
+	if !strings.HasPrefix(line, "#$#mcp-") {
 		return nil, nil // Not a valid MCP message
 	}
 
