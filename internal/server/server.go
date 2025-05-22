@@ -64,12 +64,7 @@ func handleConnection(conn net.Conn) {
 		Conn: conn,
 	}
 
-	log.Printf("Player: %+v", player)
-	log.Printf("Default room: %+v", defaultRoom.Name)
 	defaultRoom.AddPlayer(player)
-	log.Printf("Player added to room: %+v", player.Room)
-	player.Room = defaultRoom
-	log.Printf("[after] Player added to room: %+v", player.Room)
 	conn.Write([]byte(fmt.Sprintf("Welcome %s! You are in %s.\n", name, defaultRoom.Name)))
 
 	// scanner := bufio.NewScanner(conn)
