@@ -25,6 +25,7 @@ func (r *Room) AddPlayer(p *Player) {
 	r.mu.Lock()
 	r.mu.Unlock() // !NOTE: Unlock before Broadcast to avoid deadlock
 
+	p.Room = r // Set the player's room
 	r.Players[p.Name] = p
 	r.Broadcast(fmt.Sprintf("%s has entered the room", p.Name), p.Name)
 }

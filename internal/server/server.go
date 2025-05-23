@@ -80,7 +80,7 @@ func handleConnection(conn net.Conn) {
 
 		if msg == nil {
 			// Not an MCP message, treat as plain text
-			conn.Write([]byte("Say something like #&#mcp-emote: text=\"waves\"\n"))
+			conn.Write([]byte("Say something like #$#mcp-emote: text=\"waves\"\n"))
 			continue
 		}
 
@@ -96,6 +96,20 @@ func handleConnection(conn net.Conn) {
 			full := fmt.Sprintf("* %s %s", player.Name, text)
 			player.Room.Broadcast(full, player.Name)
 			conn.Write([]byte("* You " + text + "\n"))
+		case "mcp-roll":
+			diceExpr := msg.Args["dice"]
+			reason := msg.Args["reason"]
+
+			result, detail, err := game.Roll(diceExpr)
+			if err != nil {
+				conn.Write([]byte("Error: " + err.Error() + "\n"))
+				return
+			}
+
+			message := fmt.Sprintf("%s rolls for %s; %s = %d",
+				player.Name, reason, detail, result)
+			player.Room.Broadcast(message, player.Name)
+			conn.Write([]byte("* You " + detail + "\n"))
 		default:
 			conn.Write([]byte(fmt.Sprintf("Unknown MCP cmd: " + msg.Tag + "\n")))
 		}
