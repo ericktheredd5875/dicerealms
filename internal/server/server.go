@@ -12,7 +12,17 @@ import (
 )
 
 // Temporary default room
-var defaultRoom = game.NewRoom("The Tavern")
+var roomTavern = game.NewRoom(
+	"The Tavern",
+	"A warm, firelit tavern with the smell of ale and woodsmoke.")
+var roomStreet = game.NewRoom(
+	"Cobblestone Street",
+	"A narrow street flanked by market stalls and lanterns.")
+
+func init() {
+	roomTavern.Exits["north"] = roomStreet
+	roomStreet.Exits["south"] = roomTavern
+}
 
 func Start(addr string) error {
 
@@ -64,8 +74,9 @@ func handleConnection(conn net.Conn) {
 		Conn: conn,
 	}
 
-	defaultRoom.AddPlayer(player)
-	conn.Write([]byte(fmt.Sprintf("Welcome %s! You are in %s.\n", name, defaultRoom.Name)))
+	roomTavern.AddPlayer(player)
+	conn.Write([]byte(
+		fmt.Sprintf("Welcome %s! You are in %s.\n", name, roomTavern.Name)))
 	conn.Write([]byte("Type #$#mcp-help for a list of commands.\n"))
 
 	// scanner := bufio.NewScanner(conn)
@@ -91,7 +102,7 @@ func handleConnection(conn net.Conn) {
 		log.Printf("Parsed MCP: tag=%s args=%v", msg.Tag, msg.Args)
 
 		// Later: Route MCP commands to appropriate handlers
-		conn.Write([]byte(fmt.Sprintf("Received MCP command: %s\n", msg.Tag)))
+		// conn.Write([]byte(fmt.Sprintf("Received MCP command: %s\n", msg.Tag)))
 
 		switch msg.Tag {
 		case "mcp-emote":
@@ -113,6 +124,8 @@ func handleConnection(conn net.Conn) {
 				player.Name, reason, detail, result)
 			player.Room.Broadcast(message, player.Name)
 			conn.Write([]byte("* You " + detail + "\n"))
+		case "mcp-look":
+			conn.Write([]byte(player.Look()))
 		case "mcp-help":
 			help := "\n<!!--------------------------------!!> \n"
 			help += "+-- DiceRealms Commands:\n"

@@ -25,7 +25,7 @@ func (m *mockConn) SetReadDeadline(t time.Time) error  { return nil }
 func (m *mockConn) SetWriteDeadline(t time.Time) error { return nil }
 
 func TestRoomBroadcast(t *testing.T) {
-	room := NewRoom("Test Room")
+	room := NewRoom("Test Room", "A test room for broadcasting messages.")
 
 	aliceConn := &mockConn{}
 	bobConn := &mockConn{}
@@ -39,7 +39,7 @@ func TestRoomBroadcast(t *testing.T) {
 	room.Broadcast("The dragon roars!", "Alice")
 
 	got := bobConn.String()
-	want := "The dragon roars!\n"
+	want := "The dragon roars!\n+>> "
 
 	if got != want {
 		t.Errorf("Expected %q, got %q", want, got)

@@ -2,22 +2,24 @@ package game
 
 import (
 	"fmt"
-	"log"
 	"sync"
 )
 
 type Room struct {
 	Name    string
+	Desc    string
 	Players map[string]*Player
-	mu      sync.Mutex
+	// **IE: North, South, East, West, Up, Down, In, Out, etc.
+	Exits map[string]*Room
+	mu    sync.Mutex
 }
 
-func NewRoom(name string) *Room {
-
-	log.Printf("Creating new room: %s", name)
+func NewRoom(name string, desc string) *Room {
 	return &Room{
 		Name:    name,
+		Desc:    desc,
 		Players: make(map[string]*Player),
+		Exits:   make(map[string]*Room),
 	}
 }
 
@@ -43,6 +45,7 @@ func (r *Room) Broadcast(message string, sender string) {
 	for name, player := range r.Players {
 		if name != sender {
 			player.Conn.Write([]byte(message + "\n"))
+			player.Conn.Write([]byte("+>> "))
 		}
 	}
 }

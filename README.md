@@ -51,6 +51,7 @@ Then try:
 #$#mcp-emote: text="draws his sword"
 #$#mcp-say: text="We must be ready!"
 #$#mcp-roll: dice="1d20+3" reason="Perception"
+#$#mcp-help
 ```
 
 ---
@@ -87,6 +88,10 @@ MIT — feel free to fork and build your own realms.
 * [ ] WebSocket/Discord client
 * [ ] Persistent storage with PostgreSQL
 * [ ] AI-driven NPCs and dynamic storytelling
+* [ ] Split command descriptions into a dedicated map for maintainability.
+* [ ] Add mcp-help: command="mcp-roll" to explain individual commands in detail.
+* [ ] Let DMs define custom help menus for their sessions.
+* [ ] More Look-like commands (examine, scene, etc.).
 
 ---
 
