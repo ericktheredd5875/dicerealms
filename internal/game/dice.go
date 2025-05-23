@@ -43,10 +43,20 @@ func Roll(expr string) (int, string, error) {
 		parts[i] = strconv.Itoa(r)
 	}
 
-	details := fmt.Sprintf("Rolled %s -> [%s]+%s= %d",
+	critical := ""
+	if numDice == 1 {
+		if rolls[0] == 1 {
+			critical = " (CRITICAL FAILURE)"
+		} else if rolls[0] == diceSides {
+			critical = " (CRITICAL SUCCESS)"
+		}
+	}
+
+	details := fmt.Sprintf("Rolled %s -> [%s]+%s= %d%s",
 		expr, strings.Join(parts, ", "),
 		fmtIf(modifier != 0, fmt.Sprintf("%d", modifier), ""),
 		total,
+		critical,
 	)
 
 	return total, details, nil
