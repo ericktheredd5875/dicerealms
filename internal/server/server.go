@@ -126,6 +126,15 @@ func handleConnection(conn net.Conn) {
 			conn.Write([]byte("* You " + detail + "\n"))
 		case "mcp-look":
 			conn.Write([]byte(player.Look()))
+		case "mcp-go":
+			dir := msg.Args["direction"]
+			result, err := player.Move(dir)
+			if err != nil {
+				conn.Write([]byte("|- !!" + err.Error() + "!!\n"))
+			} else {
+				conn.Write([]byte(result))
+				conn.Write([]byte(player.Look()))
+			}
 		case "mcp-help":
 			help := "\n<!!--------------------------------!!> \n"
 			help += "+-- DiceRealms Commands:\n"
