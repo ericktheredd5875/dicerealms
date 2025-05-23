@@ -17,15 +17,20 @@ func Parse(line string) (*Message, error) {
 		return nil, nil // Not a valid MCP message
 	}
 
-	parts := strings.SplitN(line[3:], ":", 2)
-	if len(parts) != 2 {
-		return nil, nil
+	// Remove the #$# prefix
+	line = line[3:]
+
+	// Check if there's a colon
+	if strings.Contains(line, ":") {
+		parts := strings.SplitN(line, ":", 2)
+		tag := strings.TrimSpace(parts[0])
+		args := parseArgs(parts[1])
+		return &Message{Tag: tag, Args: args}, nil
+	} else {
+		// No colon, treat the entire line as the tag
+		tag := strings.TrimSpace(line)
+		return &Message{Tag: tag, Args: make(map[string]string)}, nil
 	}
-
-	tag := strings.TrimSpace(parts[0])
-	args := parseArgs(parts[1])
-
-	return &Message{Tag: tag, Args: args}, nil
 }
 
 func parseArgs(input string) map[string]string {

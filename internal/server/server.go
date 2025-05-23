@@ -66,9 +66,12 @@ func handleConnection(conn net.Conn) {
 
 	defaultRoom.AddPlayer(player)
 	conn.Write([]byte(fmt.Sprintf("Welcome %s! You are in %s.\n", name, defaultRoom.Name)))
+	conn.Write([]byte("Type #$#mcp-help for a list of commands.\n"))
 
 	// scanner := bufio.NewScanner(conn)
+	conn.Write([]byte("+>> "))
 	for scanner.Scan() {
+
 		line := scanner.Text()
 		log.Printf("Received: %s", line)
 
@@ -110,9 +113,23 @@ func handleConnection(conn net.Conn) {
 				player.Name, reason, detail, result)
 			player.Room.Broadcast(message, player.Name)
 			conn.Write([]byte("* You " + detail + "\n"))
+		case "mcp-help":
+			help := "\n<!!--------------------------------!!> \n"
+			help += "+-- DiceRealms Commands:\n"
+			help += "<!!--------------------------------!!> \n"
+			help += "+-- #$#mcp-emote: text=\"grins and nods\" \n"
+			help += "+-- #$#mcp-say: text=\"We must move quickly.\" \n"
+			help += "+-- #$#mcp-roll: dice=\"1d20+5\" reason=\"Stealth\" \n"
+			help += "+-- #$#mcp-look \n"
+			help += "+-- #$#mcp-go: direction=\"north\" \n"
+			help += "+-- #$#mcp-help \n"
+			help += "<!!--------------------------------!!> \n"
+
+			conn.Write([]byte(help + "\n"))
 		default:
 			conn.Write([]byte(fmt.Sprintf("Unknown MCP cmd: " + msg.Tag + "\n")))
 		}
+		conn.Write([]byte("+>> "))
 	}
 
 	if err := scanner.Err(); err != nil {
