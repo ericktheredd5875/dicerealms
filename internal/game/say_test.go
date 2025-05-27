@@ -7,26 +7,26 @@ import (
 	"time"
 )
 
-type bufferConn struct {
+type sayBufferConn struct {
 	data strings.Builder
 }
 
-func (b *bufferConn) Write(p []byte) (n int, err error) {
+func (b *sayBufferConn) Write(p []byte) (n int, err error) {
 	return b.data.Write(p)
 }
 
-func (b *bufferConn) Read(p []byte) (int, error)         { return 0, nil }
-func (b *bufferConn) Close() error                       { return nil }
-func (b *bufferConn) LocalAddr() net.Addr                { return nil }
-func (b *bufferConn) RemoteAddr() net.Addr               { return nil }
-func (b *bufferConn) SetDeadline(t time.Time) error      { return nil }
-func (b *bufferConn) SetReadDeadline(t time.Time) error  { return nil }
-func (b *bufferConn) SetWriteDeadline(t time.Time) error { return nil }
+func (b *sayBufferConn) Read(p []byte) (int, error)         { return 0, nil }
+func (b *sayBufferConn) Close() error                       { return nil }
+func (b *sayBufferConn) LocalAddr() net.Addr                { return nil }
+func (b *sayBufferConn) RemoteAddr() net.Addr               { return nil }
+func (b *sayBufferConn) SetDeadline(t time.Time) error      { return nil }
+func (b *sayBufferConn) SetReadDeadline(t time.Time) error  { return nil }
+func (b *sayBufferConn) SetWriteDeadline(t time.Time) error { return nil }
 
 func TestSay(t *testing.T) {
 	room := NewRoom("Hall", "Echoing stone chamber.")
-	aConn := &bufferConn{}
-	bConn := &bufferConn{}
+	aConn := &sayBufferConn{}
+	bConn := &sayBufferConn{}
 
 	alice := &Player{Name: "Alice", Conn: aConn}
 	bob := &Player{Name: "Bob", Conn: bConn}

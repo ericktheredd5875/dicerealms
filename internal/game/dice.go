@@ -11,9 +11,8 @@ import (
 
 var diceExpr = regexp.MustCompile(`^(\d+)d(\d+)([+-]\d+)?$`)
 
-func init() {
-	rand.Seed(time.Now().UnixNano())
-}
+// Create a local random number generator
+var rng = rand.New(rand.NewSource(time.Now().UnixNano()))
 
 func Roll(expr string) (int, string, error) {
 	matches := diceExpr.FindStringSubmatch(expr)
@@ -32,7 +31,7 @@ func Roll(expr string) (int, string, error) {
 	rolls := make([]int, numDice)
 	total := 0
 	for i := 0; i < numDice; i++ {
-		roll := rand.Intn(diceSides) + 1
+		roll := rng.Intn(diceSides) + 1
 		rolls[i] = roll
 		total += roll
 	}
