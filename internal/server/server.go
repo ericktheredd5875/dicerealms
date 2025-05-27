@@ -15,12 +15,18 @@ import (
 var roomTavern = game.NewRoom(
 	"The Tavern",
 	"A warm, firelit tavern with the smell of ale and woodsmoke.")
+
 var roomStreet = game.NewRoom(
 	"Cobblestone Street",
 	"A narrow street flanked by market stalls and lanterns.")
 
 func init() {
+	roomTavern.JoinMsg = "%s pushes through the tavern door."
+	roomTavern.LeaveMsg = "%s disappers behind the tavern curtain."
 	roomTavern.Exits["north"] = roomStreet
+
+	roomStreet.JoinMsg = "%s walks in from another street."
+	roomStreet.LeaveMsg = "%s turns a corner and vanishes from view."
 	roomStreet.Exits["south"] = roomTavern
 }
 
