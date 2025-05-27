@@ -92,6 +92,9 @@ MIT — feel free to fork and build your own realms.
 * [ ] Add mcp-help: command="mcp-roll" to explain individual commands in detail.
 * [ ] Let DMs define custom help menus for their sessions.
 * [ ] More Look-like commands (examine, scene, etc.).
+* [ ] Add mcp-ooc for out-of-character speech.
+* [ ] Support speech tags like volume="shout" → shouts, mutters, etc.
+* [ ] Auto-prompt players with mcp-say: text="" if they type untagged input.
 
 ---
 

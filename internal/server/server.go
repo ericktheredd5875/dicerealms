@@ -116,6 +116,13 @@ func handleConnection(conn net.Conn) {
 			full := fmt.Sprintf("* %s %s", player.Name, text)
 			player.Room.Broadcast(full, player.Name)
 			conn.Write([]byte("* You " + text + "\n"))
+		case "mcp-say":
+			text := msg.Args["text"]
+			if text == "" {
+				conn.Write([]byte("Nothing to say!!\n"))
+				break
+			}
+			player.Say(text)
 		case "mcp-roll":
 			diceExpr := msg.Args["dice"]
 			reason := msg.Args["reason"]
