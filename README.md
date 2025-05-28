@@ -83,7 +83,7 @@ MIT — feel free to fork and build your own realms.
 
 ## 🧠 Future Roadmap
 
-* [ ] Player commands: ~~`look`~~, ~~`move`~~, `inventory`
+* [ ] Player commands: ~~`look`~~, ~~`move`~~, ~~`inventory`~~
 * [ ] DM tools: `mcp-narrate`, scene control
 * [ ] WebSocket/Discord client
 * [ ] Persistent storage with PostgreSQL
@@ -97,7 +97,9 @@ MIT — feel free to fork and build your own realms.
 * [ ] Auto-prompt players with mcp-say: text="" if they type untagged input.
 * [ ] Restrict narrate to DM-role players.
 * [ ] Allow styled moods (e.g., tense, calm).
-* [ ] Store narration logs by scene or timestamp.
+* [x] Store narration logs by scene or timestamp.
+* [ ] Stats: show a reminder of how to improve them later.
+* [ ] mcp-stat-reset for DM use
 
 ---
 

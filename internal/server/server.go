@@ -76,8 +76,9 @@ func handleConnection(conn net.Conn) {
 
 	// Create Player
 	player := &game.Player{
-		Name: name,
-		Conn: conn,
+		Name:          name,
+		Conn:          conn,
+		AssignedStats: make(map[string]bool),
 	}
 
 	roomTavern.AddPlayer(player)
@@ -174,6 +175,49 @@ func handleConnection(conn net.Conn) {
 				player.Name, reason, detail, result)
 			player.Room.Broadcast(message, player.Name)
 			conn.Write([]byte("* You " + detail + "\n"))
+		case "mcp-stats":
+			conn.Write([]byte(player.ShowStats()))
+		case "mcp-stat":
+			if stat, ok := msg.Args["roll"]; ok {
+				result, err := player.AssignStat(stat)
+				if err != nil {
+					conn.Write([]byte("Error: " + err.Error() + "\n"))
+
+				} else {
+					conn.Write([]byte(result + "\n"))
+				}
+			}
+		case "mcp-stat-gen":
+			result, err := player.AutoGenStats()
+			if err != nil {
+				conn.Write([]byte("Error: " + err.Error() + "\n"))
+			} else {
+				conn.Write([]byte("Auto-generated stats: \n" + result + "\n"))
+			}
+		case "mcp-inventory", "mcp-inv":
+			conn.Write([]byte(player.InventoryList()))
+		case "mcp-take":
+			item := msg.Args["item"]
+			if item == "" {
+				conn.Write([]byte("!! Take must include 'item'.\n"))
+				break
+			}
+
+			player.AddItem(item)
+			conn.Write([]byte("You picked up " + item + ".\n"))
+		case "mcp-drop":
+			item := msg.Args["item"]
+			if item == "" {
+				conn.Write([]byte("!! Drop must include 'item'.\n"))
+				break
+			}
+
+			dropped := player.RemoveItem(item)
+			if dropped {
+				conn.Write([]byte("You dropped " + item + ".\n"))
+			} else {
+				conn.Write([]byte("You don't have that item.\n"))
+			}
 		case "mcp-look":
 			conn.Write([]byte(player.Look()))
 		case "mcp-go":
@@ -189,14 +233,20 @@ func handleConnection(conn net.Conn) {
 			help := "\n<!!--------------------------------!!> \n"
 			help += "+-- DiceRealms Commands:\n"
 			help += "<!!--------------------------------!!> \n"
-			help += "+-- #$#mcp-emote: text=\"grins and nods\" \n"
-			help += "+-- #$#mcp-say: text=\"We must move quickly.\" \n"
-			help += "+-- #$#mcp-whisper: name=\"Alice\" text=\"We must move quickly.\" \n"
-			help += "+-- #$#mcp-narrate: text=\"The sky is clear and the birds are singing.\" \n"
-			help += "+-- #$#mcp-roll: dice=\"1d20+5\" reason=\"Stealth\" \n"
-			help += "+-- #$#mcp-look \n"
-			help += "+-- #$#mcp-go: direction=\"north\" \n"
-			help += "+-- #$#mcp-help \n"
+			help += "|-- #$#mcp-emote: text=\"grins and nods\" \n"
+			help += "|-- #$#mcp-say: text=\"We must move quickly.\" \n"
+			help += "|-- #$#mcp-whisper: name=\"Alice\" text=\"We must move quickly.\" \n"
+			help += "|-- #$#mcp-narrate: text=\"The sky is clear and the birds are singing.\" \n"
+			help += "|-- #$#mcp-roll: dice=\"1d20+5\" reason=\"Stealth\" \n"
+			help += "|-- #$#mcp-stats \n"
+			help += "|---- #$#mcp-stat: roll=\"STR\" \n"
+			help += "|---- #$#mcp-stat-gen \n"
+			help += "|-- #$#mcp-inventory \n"
+			help += "|---- #$#mcp-take: item=\"sword\" \n"
+			help += "|---- #$#mcp-drop: item=\"sword\" \n"
+			help += "|-- #$#mcp-look \n"
+			help += "|-- #$#mcp-go: direction=\"north\" \n"
+			help += "|-- #$#mcp-help \n"
 			help += "<!!--------------------------------!!> \n"
 
 			conn.Write([]byte(help))

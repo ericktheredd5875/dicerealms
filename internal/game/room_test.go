@@ -39,7 +39,7 @@ func TestRoomBroadcast(t *testing.T) {
 	room.Broadcast("The dragon roars!", "Alice")
 
 	got := bobConn.String()
-	want := "The dragon roars!\n+>> "
+	want := "\nThe dragon roars!\n\nBob@Test Room +>> "
 
 	if got != want {
 		t.Errorf("Expected %q, got %q", want, got)
