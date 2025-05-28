@@ -142,7 +142,7 @@ func handleConnection(conn net.Conn) {
 				break
 			}
 			player.Narrate(text)
-			conn.Write([]byte("* 0xD83D 0xDD6E You narrate: " + text + "\n"))
+			conn.Write([]byte("You narrate: " + text + "\n"))
 		case "mcp-roll":
 			diceExpr := msg.Args["dice"]
 			reason := msg.Args["reason"]
