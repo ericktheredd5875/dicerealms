@@ -11,4 +11,8 @@ func (p *Player) Narrate(msg string) {
 
 	message := fmt.Sprintf("<narritive> %s", msg)
 	p.Room.Broadcast(message, "")
+
+	if p.Room.ActiveScene != nil {
+		p.Room.ActiveScene.LogEntry(message)
+	}
 }

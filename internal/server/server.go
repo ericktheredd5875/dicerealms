@@ -84,9 +84,10 @@ func handleConnection(conn net.Conn) {
 	conn.Write([]byte(
 		fmt.Sprintf("Welcome %s! You are in %s.\n", name, roomTavern.Name)))
 	conn.Write([]byte("Type #$#mcp-help for a list of commands.\n"))
+	userPrompt(conn, player.Name)
 
 	// scanner := bufio.NewScanner(conn)
-	conn.Write([]byte("+>> "))
+	// conn.Write([]byte("+>> "))
 	for scanner.Scan() {
 
 		line := scanner.Text()
@@ -116,6 +117,9 @@ func handleConnection(conn net.Conn) {
 			full := fmt.Sprintf("* %s %s", player.Name, text)
 			player.Room.Broadcast(full, player.Name)
 			conn.Write([]byte("* You " + text + "\n"))
+			if player.Room.ActiveScene != nil {
+				player.Room.ActiveScene.LogEntry(fmt.Sprintf("%s emotes: \"%s\"", player.Name, full))
+			}
 		case "mcp-say":
 			text := msg.Args["text"]
 			if text == "" {
@@ -143,6 +147,19 @@ func handleConnection(conn net.Conn) {
 			}
 			player.Narrate(text)
 			conn.Write([]byte("You narrate: " + text + "\n"))
+		case "mcp-scene-start":
+			title := msg.Args["title"]
+			mood := msg.Args["mood"]
+			if title == "" {
+				conn.Write([]byte("!! Start scene must include 'title'.\n"))
+				break
+			}
+
+			player.Room.StartScene(title, mood, player.Name)
+			conn.Write([]byte("Scene started."))
+		case "mcp-scene-end":
+			summary := player.Room.EndScene(player.Name)
+			conn.Write([]byte(summary + "\n"))
 		case "mcp-roll":
 			diceExpr := msg.Args["dice"]
 			reason := msg.Args["reason"]
@@ -182,14 +199,19 @@ func handleConnection(conn net.Conn) {
 			help += "+-- #$#mcp-help \n"
 			help += "<!!--------------------------------!!> \n"
 
-			conn.Write([]byte(help + "\n"))
+			conn.Write([]byte(help))
 		default:
 			conn.Write([]byte(fmt.Sprintf("Unknown MCP cmd: " + msg.Tag + "\n")))
 		}
-		conn.Write([]byte("+>> "))
+
+		userPrompt(conn, player.Name)
 	}
 
 	if err := scanner.Err(); err != nil {
 		log.Printf("Connection error: %v", err)
 	}
+}
+
+func userPrompt(conn net.Conn, playerName string) {
+	conn.Write([]byte(fmt.Sprintf("\n%s@DiceRealms +>> ", playerName)))
 }
