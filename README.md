@@ -83,18 +83,21 @@ MIT — feel free to fork and build your own realms.
 
 ## 🧠 Future Roadmap
 
-* [ ] Player commands: `look`, `move`, `inventory`
+* [ ] Player commands: ~~`look`~~, ~~`move`~~, `inventory`
 * [ ] DM tools: `mcp-narrate`, scene control
 * [ ] WebSocket/Discord client
 * [ ] Persistent storage with PostgreSQL
 * [ ] AI-driven NPCs and dynamic storytelling
 * [ ] Split command descriptions into a dedicated map for maintainability.
-* [ ] Add mcp-help: command="mcp-roll" to explain individual commands in detail.
+* [x] Add mcp-help: command="mcp-roll" to explain individual commands in detail.
 * [ ] Let DMs define custom help menus for their sessions.
 * [ ] More Look-like commands (examine, scene, etc.).
 * [ ] Add mcp-ooc for out-of-character speech.
 * [ ] Support speech tags like volume="shout" → shouts, mutters, etc.
 * [ ] Auto-prompt players with mcp-say: text="" if they type untagged input.
+* [ ] Restrict narrate to DM-role players.
+* [ ] Allow styled moods (e.g., tense, calm).
+* [ ] Store narration logs by scene or timestamp.
 
 ---
 

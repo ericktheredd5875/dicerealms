@@ -135,6 +135,14 @@ func handleConnection(conn net.Conn) {
 			if err != nil {
 				conn.Write([]byte("!!" + err.Error() + "!!\n"))
 			}
+		case "mcp-narrate":
+			text := msg.Args["text"]
+			if text == "" {
+				conn.Write([]byte("!! Narrate must include 'text'.\n"))
+				break
+			}
+			player.Narrate(text)
+			conn.Write([]byte("* 0xD83D 0xDD6E You narrate: " + text + "\n"))
 		case "mcp-roll":
 			diceExpr := msg.Args["dice"]
 			reason := msg.Args["reason"]
@@ -167,6 +175,7 @@ func handleConnection(conn net.Conn) {
 			help += "+-- #$#mcp-emote: text=\"grins and nods\" \n"
 			help += "+-- #$#mcp-say: text=\"We must move quickly.\" \n"
 			help += "+-- #$#mcp-whisper: name=\"Alice\" text=\"We must move quickly.\" \n"
+			help += "+-- #$#mcp-narrate: text=\"The sky is clear and the birds are singing.\" \n"
 			help += "+-- #$#mcp-roll: dice=\"1d20+5\" reason=\"Stealth\" \n"
 			help += "+-- #$#mcp-look \n"
 			help += "+-- #$#mcp-go: direction=\"north\" \n"
