@@ -84,7 +84,7 @@ func handleConnection(conn net.Conn) {
 	conn.Write([]byte(
 		fmt.Sprintf("Welcome %s! You are in %s.\n", name, roomTavern.Name)))
 	conn.Write([]byte("Type #$#mcp-help for a list of commands.\n"))
-	userPrompt(conn, player.Name)
+	userPrompt(conn, player.Name, player.Room.Name)
 
 	// scanner := bufio.NewScanner(conn)
 	// conn.Write([]byte("+>> "))
@@ -204,7 +204,7 @@ func handleConnection(conn net.Conn) {
 			conn.Write([]byte(fmt.Sprintf("Unknown MCP cmd: " + msg.Tag + "\n")))
 		}
 
-		userPrompt(conn, player.Name)
+		userPrompt(conn, player.Name, player.Room.Name)
 	}
 
 	if err := scanner.Err(); err != nil {
@@ -212,6 +212,6 @@ func handleConnection(conn net.Conn) {
 	}
 }
 
-func userPrompt(conn net.Conn, playerName string) {
-	conn.Write([]byte(fmt.Sprintf("\n%s@DiceRealms +>> ", playerName)))
+func userPrompt(conn net.Conn, playerName string, roomName string) {
+	conn.Write([]byte(fmt.Sprintf("\n%s@%s +>> ", playerName, roomName)))
 }

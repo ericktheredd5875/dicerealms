@@ -3,7 +3,6 @@ package game
 import (
 	"fmt"
 	"sync"
-	"time"
 )
 
 type Room struct {
@@ -31,11 +30,14 @@ func NewRoom(name string, desc string) *Room {
 
 func (r *Room) AddPlayer(p *Player) {
 	r.mu.Lock()
-	r.mu.Unlock() // !NOTE: Unlock before Broadcast to avoid deadlock
 
 	p.Room = r // Set the player's room
 	r.Players[p.Name] = p
 	msg := fmt.Sprintf(r.JoinMsg, p.Name)
+
+	// !NOTE: Unlock before Broadcast to avoid deadlock
+	r.mu.Unlock()
+
 	r.Broadcast(msg, p.Name)
 }
 
@@ -59,42 +61,11 @@ func (r *Room) Broadcast(message string, sender string) {
 
 	for name, player := range r.Players {
 		if name != sender {
-			player.Conn.Write([]byte(message + "\n"))
-			// player.Conn.Write([]byte("+>> "))
+			player.Conn.Write([]byte("\n" + message + "\n"))
+
+			// Reprint prompt for interactivity
+			prompt := fmt.Sprintf("\n%s@%s +>> ", player.Name, r.Name)
+			player.Conn.Write([]byte(prompt))
 		}
 	}
-}
-
-func (r *Room) StartScene(title string, mood, startedBy string) {
-	r.mu.Lock()
-	r.mu.Unlock()
-
-	r.ActiveScene = &Scene{
-		Title:     title,
-		Mood:      mood,
-		StartedBy: startedBy,
-		StartedAt: time.Now(),
-		Log:       []string{},
-	}
-
-	r.Broadcast(fmt.Sprintf("<new> Scene started: %s [%s]", title, mood), "")
-}
-
-func (r *Room) EndScene(endedBy string) string {
-	r.mu.Lock()
-	r.mu.Unlock()
-
-	if r.ActiveScene == nil {
-		return "No active scene to end."
-	}
-
-	r.ActiveScene.EndedBy = endedBy
-	r.ActiveScene.EndedAt = time.Now()
-	summary := r.ActiveScene.Summary()
-
-	r.ActiveScene = nil
-	r.Broadcast(fmt.Sprintf("<end> Scene ended: %s", summary), "")
-
-	return summary
-
 }

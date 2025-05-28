@@ -2,6 +2,8 @@ package game
 
 import (
 	"fmt"
+	"os"
+	"path/filepath"
 	"strings"
 	"time"
 )
@@ -14,6 +16,51 @@ type Scene struct {
 	EndedBy   string
 	EndedAt   time.Time
 	Log       []string
+}
+
+func (r *Room) StartScene(title string, mood, startedBy string) {
+	r.mu.Lock()
+
+	r.ActiveScene = &Scene{
+		Title:     title,
+		Mood:      mood,
+		StartedBy: startedBy,
+		StartedAt: time.Now(),
+		Log:       []string{},
+	}
+	r.mu.Unlock()
+
+	r.Broadcast(fmt.Sprintf("<new> Scene started: %s [%s]", title, mood), "")
+}
+
+func (r *Room) EndScene(endedBy string) string {
+	r.mu.Lock()
+
+	if r.ActiveScene == nil {
+		return "No active scene to end."
+	}
+
+	r.ActiveScene.EndedBy = endedBy
+	r.ActiveScene.EndedAt = time.Now()
+	summary := r.ActiveScene.Summary()
+
+	filename := fmt.Sprintf("scene_%s_%s.txt", sanitizeFileName(r.ActiveScene.Title), time.Now().Format("20060102_150405"))
+	path := filepath.Join("scenes", filename)
+	_ = os.MkdirAll("scenes", 0755)
+	err := os.WriteFile(path, []byte(summary), 0644)
+	if err != nil {
+		summary += fmt.Sprintf("Error writing scene file: %v", err)
+	} else {
+		summary += fmt.Sprintf("Scene saved to %s", path)
+	}
+
+	r.mu.Unlock()
+
+	r.ActiveScene = nil
+	r.Broadcast("<end> Scene ended", "")
+
+	return summary
+
 }
 
 func (s *Scene) LogEntry(msg string) {
@@ -34,4 +81,9 @@ func (s *Scene) Summary() string {
 	}
 
 	return sb.String()
+}
+
+func sanitizeFileName(name string) string {
+	replacer := strings.NewReplacer(" ", "_", "/", "-", "\\", "-", ":", "_")
+	return replacer.Replace(name)
 }
