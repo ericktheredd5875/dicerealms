@@ -20,5 +20,6 @@ func (p *Player) Move(dir string) (string, error) {
 	targetRoom.AddPlayer(p)
 	p.Room = targetRoom
 
-	return fmt.Sprintf("---\nYou move %s into %s.\n", dir, targetRoom.Name), nil
+	msg := fmt.Sprintf("---\nYou move %s into %s.\n", dir, targetRoom.Name)
+	return Colorize(msg, Gray), nil
 }

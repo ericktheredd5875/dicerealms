@@ -27,10 +27,17 @@ type Player struct {
 	AssignedStats map[string]bool
 }
 
+func PlayerPrompt(playerName string, roomName string) string {
+
+	prompt := Colorize("%s@%s +>>", Bold+Cyan)
+	prompt = fmt.Sprintf("\n"+prompt, playerName, roomName)
+	return prompt
+}
+
 func (p *Player) ShowStats() string {
 	stats := p.Stats
 
-	statsBlock := "\n<!!--------------------------------!!>"
+	statsBlock := "<!!--------------------------------!!>"
 	statsBlock += "\n+-- Stats for %s"
 	statsBlock += "\n<!!--------------------------------!!>"
 	statsBlock += "\n+-- STR: %d   DEX: %d   CON: %d"

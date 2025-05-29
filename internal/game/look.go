@@ -39,5 +39,5 @@ func (p *Player) Look() string {
 		}
 	}
 
-	return builder.String()
+	return Colorize(builder.String(), Gray)
 }

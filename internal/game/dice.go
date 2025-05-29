@@ -42,21 +42,29 @@ func Roll(expr string) (int, string, error) {
 		parts[i] = strconv.Itoa(r)
 	}
 
-	critical := ""
+	criticalSuccess := ""
+	criticalFailure := ""
 	if numDice == 1 {
 		if rolls[0] == 1 {
-			critical = " (CRITICAL FAILURE)"
+			criticalFailure = " (CRITICAL FAILURE)"
 		} else if rolls[0] == diceSides {
-			critical = " (CRITICAL SUCCESS)"
+			criticalSuccess = " (CRITICAL SUCCESS)"
 		}
 	}
 
-	details := fmt.Sprintf("Rolled %s -> [%s]+%s= %d%s",
+	details := fmt.Sprintf("Rolled %s -> [%s]+%s= %d",
 		expr, strings.Join(parts, ", "),
 		fmtIf(modifier != 0, fmt.Sprintf("%d", modifier), ""),
 		total,
-		critical,
 	)
+
+	if criticalSuccess != "" {
+		details += criticalSuccess
+		details = Colorize(details, Green)
+	} else if criticalFailure != "" {
+		details += criticalFailure
+		details = Colorize(details, Red)
+	}
 
 	return total, details, nil
 }

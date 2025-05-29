@@ -6,6 +6,8 @@ import (
 	"net"
 	"testing"
 	"time"
+
+	"github.com/ericktheredd5875/dicerealms/config"
 )
 
 type mockConn struct {
@@ -27,6 +29,7 @@ func (m *mockConn) SetWriteDeadline(t time.Time) error { return nil }
 func TestRoomBroadcast(t *testing.T) {
 	room := NewRoom("Test Room", "A test room for broadcasting messages.")
 
+	config.SupportsANSI = false
 	aliceConn := &mockConn{}
 	bobConn := &mockConn{}
 
@@ -39,7 +42,7 @@ func TestRoomBroadcast(t *testing.T) {
 	room.Broadcast("The dragon roars!", "Alice")
 
 	got := bobConn.String()
-	want := "\nThe dragon roars!\n\nBob@Test Room +>> "
+	want := "\nThe dragon roars!\n\nBob@Test Room +>>"
 
 	if got != want {
 		t.Errorf("Expected %q, got %q", want, got)

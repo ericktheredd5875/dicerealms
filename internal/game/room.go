@@ -2,6 +2,7 @@ package game
 
 import (
 	"fmt"
+	"log"
 	"sync"
 )
 
@@ -49,23 +50,24 @@ func (r *Room) RemovePlayer(name string) {
 	msg := fmt.Sprintf(r.LeaveMsg, name)
 	for otherName, player := range r.Players {
 		if otherName != name {
-			player.Conn.Write([]byte(msg + "\n"))
-			// player.Conn.Write([]byte("+>> "))
+			player.Conn.Write([]byte(Colorize("\n"+msg+"\n", Gray)))
+
+			// Reprint prompt for interactivity
+			player.Conn.Write([]byte(PlayerPrompt(player.Name, r.Name)))
 		}
 	}
 }
 
-func (r *Room) Broadcast(message string, sender string) {
+func (r *Room) Broadcast(msg string, sender string) {
 	r.mu.Lock()
 	defer r.mu.Unlock()
-
+	log.Printf("Sender: %s", sender)
 	for name, player := range r.Players {
 		if name != sender {
-			player.Conn.Write([]byte("\n" + message + "\n"))
+			player.Conn.Write([]byte(Colorize("\n"+msg+"\n", Gray)))
 
 			// Reprint prompt for interactivity
-			prompt := fmt.Sprintf("\n%s@%s +>> ", player.Name, r.Name)
-			player.Conn.Write([]byte(prompt))
+			player.Conn.Write([]byte(PlayerPrompt(player.Name, r.Name)))
 		}
 	}
 }

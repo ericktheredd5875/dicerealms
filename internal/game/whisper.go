@@ -13,9 +13,13 @@ func (p *Player) Whisper(to string, msg string) error {
 		return fmt.Errorf("%s is not in the room", to)
 	}
 
-	p.Conn.Write([]byte(fmt.Sprintf(`You whisper to %s: "%s"`+"\n", to, msg)))
-	target.Conn.Write([]byte(fmt.Sprintf(`%s whispers: "%s"`+"\n", p.Name, msg)))
-	target.Conn.Write([]byte("+>> "))
+	whisperMsg := Colorize(fmt.Sprintf(`You whisper to %s: "%s"`, to, msg), Cyan)
+	p.Conn.Write([]byte(whisperMsg + "\n"))
+
+	targetWhisperMsg := Colorize(fmt.Sprintf(`%s whispers: "%s"`, p.Name, msg), Cyan)
+	target.Conn.Write([]byte("\n" + targetWhisperMsg + "\n"))
+	targetPrompt := PlayerPrompt(target.Name, target.Room.Name)
+	target.Conn.Write([]byte(targetPrompt))
 
 	return nil
 }

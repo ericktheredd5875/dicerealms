@@ -8,11 +8,13 @@ func (p *Player) Say(text string) string {
 	}
 
 	// Send to the person who spoke
-	p.Conn.Write([]byte(fmt.Sprintf(`You say, "%s"`+"\n", text)))
+	uSpoke := fmt.Sprintf(`You say, "%s"`+"\n", text)
+	uSpoke = Colorize(uSpoke, Green)
+	p.Conn.Write([]byte(uSpoke))
 
 	// Broadcast to the room
 	msg := fmt.Sprintf(`%s says, "%s"`, p.Name, text)
-	p.Room.Broadcast(msg, p.Name)
+	p.Room.Broadcast(Colorize(msg, Green), p.Name)
 
 	if p.Room.ActiveScene != nil {
 		p.Room.ActiveScene.LogEntry(msg)

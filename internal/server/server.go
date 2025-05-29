@@ -7,6 +7,7 @@ import (
 	"net"
 	"strings"
 
+	"github.com/ericktheredd5875/dicerealms/config"
 	"github.com/ericktheredd5875/dicerealms/internal/game"
 	"github.com/ericktheredd5875/dicerealms/internal/mcp"
 )
@@ -85,7 +86,8 @@ func handleConnection(conn net.Conn) {
 	conn.Write([]byte(
 		fmt.Sprintf("Welcome %s! You are in %s.\n", name, roomTavern.Name)))
 	conn.Write([]byte("Type #$#mcp-help for a list of commands.\n"))
-	userPrompt(conn, player.Name, player.Room.Name)
+	// userPrompt(conn, player.Name, player.Room.Name)
+	conn.Write([]byte(game.PlayerPrompt(player.Name, player.Room.Name)))
 
 	// scanner := bufio.NewScanner(conn)
 	// conn.Write([]byte("+>> "))
@@ -102,7 +104,8 @@ func handleConnection(conn net.Conn) {
 
 		if msg == nil {
 			// Not an MCP message, treat as plain text
-			conn.Write([]byte("Say something like #$#mcp-emote: text=\"waves\"\n"))
+			conn.Write([]byte(game.ColorizeError("Say something like #$#mcp-emote: text=\"waves\"\n")))
+			conn.Write([]byte(game.PlayerPrompt(player.Name, player.Room.Name)))
 			continue
 		}
 
@@ -116,6 +119,7 @@ func handleConnection(conn net.Conn) {
 		case "mcp-emote":
 			text := msg.Args["text"]
 			full := fmt.Sprintf("* %s %s", player.Name, text)
+			full = game.Colorize(full, game.Yellow)
 			player.Room.Broadcast(full, player.Name)
 			conn.Write([]byte("* You " + text + "\n"))
 			if player.Room.ActiveScene != nil {
@@ -124,7 +128,7 @@ func handleConnection(conn net.Conn) {
 		case "mcp-say":
 			text := msg.Args["text"]
 			if text == "" {
-				conn.Write([]byte("Nothing to say!!\n"))
+				conn.Write([]byte(game.ColorizeError("Nothing to say!!\n")))
 				break
 			}
 			player.Say(text)
@@ -132,27 +136,27 @@ func handleConnection(conn net.Conn) {
 			target := msg.Args["to"]
 			text := msg.Args["text"]
 			if target == "" || text == "" {
-				conn.Write([]byte("Whisper must include both 'to' and 'text'.\n"))
+				conn.Write([]byte(game.ColorizeError("Whisper must include both 'to' and 'text'.\n")))
 				break
 			}
 
 			err := player.Whisper(target, text)
 			if err != nil {
-				conn.Write([]byte("!!" + err.Error() + "!!\n"))
+				conn.Write([]byte(game.ColorizeError("!!" + err.Error() + "!!\n")))
 			}
 		case "mcp-narrate":
 			text := msg.Args["text"]
 			if text == "" {
-				conn.Write([]byte("!! Narrate must include 'text'.\n"))
+				conn.Write([]byte(game.ColorizeError("Narrate must include 'text'.\n")))
 				break
 			}
-			player.Narrate(text)
 			conn.Write([]byte("You narrate: " + text + "\n"))
+			player.Narrate(text, player.Name)
 		case "mcp-scene-start":
 			title := msg.Args["title"]
 			mood := msg.Args["mood"]
 			if title == "" {
-				conn.Write([]byte("!! Start scene must include 'title'.\n"))
+				conn.Write([]byte(game.ColorizeError("Start scene must include 'title'.\n")))
 				break
 			}
 
@@ -165,14 +169,14 @@ func handleConnection(conn net.Conn) {
 			diceExpr := msg.Args["dice"]
 			reason := msg.Args["reason"]
 
-			result, detail, err := game.Roll(diceExpr)
+			_, detail, err := game.Roll(diceExpr)
 			if err != nil {
-				conn.Write([]byte("Error: " + err.Error() + "\n"))
+				conn.Write([]byte(game.ColorizeError("Error: " + err.Error() + "\n")))
 				return
 			}
 
-			message := fmt.Sprintf("%s rolls for %s; %s = %d",
-				player.Name, reason, detail, result)
+			message := fmt.Sprintf("%s rolls for %s; %s",
+				player.Name, reason, detail)
 			player.Room.Broadcast(message, player.Name)
 			conn.Write([]byte("* You " + detail + "\n"))
 		case "mcp-stats":
@@ -181,7 +185,7 @@ func handleConnection(conn net.Conn) {
 			if stat, ok := msg.Args["roll"]; ok {
 				result, err := player.AssignStat(stat)
 				if err != nil {
-					conn.Write([]byte("Error: " + err.Error() + "\n"))
+					conn.Write([]byte(game.ColorizeError("Error: " + err.Error() + "\n")))
 
 				} else {
 					conn.Write([]byte(result + "\n"))
@@ -190,7 +194,7 @@ func handleConnection(conn net.Conn) {
 		case "mcp-stat-gen":
 			result, err := player.AutoGenStats()
 			if err != nil {
-				conn.Write([]byte("Error: " + err.Error() + "\n"))
+				conn.Write([]byte(game.ColorizeError("Error: " + err.Error() + "\n")))
 			} else {
 				conn.Write([]byte("Auto-generated stats: \n" + result + "\n"))
 			}
@@ -199,24 +203,26 @@ func handleConnection(conn net.Conn) {
 		case "mcp-take":
 			item := msg.Args["item"]
 			if item == "" {
-				conn.Write([]byte("!! Take must include 'item'.\n"))
+				conn.Write([]byte(game.ColorizeError("Take must include 'item'.\n")))
 				break
 			}
 
 			player.AddItem(item)
-			conn.Write([]byte("You picked up " + item + ".\n"))
+			msg := fmt.Sprintf("You picked up %s.\n", item)
+			conn.Write([]byte(game.Colorize(msg, game.Green)))
 		case "mcp-drop":
 			item := msg.Args["item"]
 			if item == "" {
-				conn.Write([]byte("!! Drop must include 'item'.\n"))
+				conn.Write([]byte(game.ColorizeError("Drop must include 'item'.\n")))
 				break
 			}
 
 			dropped := player.RemoveItem(item)
 			if dropped {
-				conn.Write([]byte("You dropped " + item + ".\n"))
+				msg := fmt.Sprintf("You dropped %s.\n", item)
+				conn.Write([]byte(game.Colorize(msg, game.Red+game.Bold)))
 			} else {
-				conn.Write([]byte("You don't have that item.\n"))
+				conn.Write([]byte(game.ColorizeError("You don't have that item.\n")))
 			}
 		case "mcp-look":
 			conn.Write([]byte(player.Look()))
@@ -224,10 +230,18 @@ func handleConnection(conn net.Conn) {
 			dir := msg.Args["direction"]
 			result, err := player.Move(dir)
 			if err != nil {
-				conn.Write([]byte("|- !!" + err.Error() + "!!\n"))
+				conn.Write([]byte(game.ColorizeError(err.Error() + "\n")))
 			} else {
 				conn.Write([]byte(result))
 				conn.Write([]byte(player.Look()))
+			}
+		case "mcp-client":
+			if msg.Args["supports_ansi"] == "false" {
+				config.SupportsANSI = false
+				conn.Write([]byte(game.Colorize("ANSI support disabled.\n", game.Red)))
+			} else {
+				config.SupportsANSI = true
+				conn.Write([]byte(game.Colorize("ANSI support enabled.\n", game.Green)))
 			}
 		case "mcp-help":
 			help := "\n<!!--------------------------------!!> \n"
@@ -235,7 +249,7 @@ func handleConnection(conn net.Conn) {
 			help += "<!!--------------------------------!!> \n"
 			help += "|-- #$#mcp-emote: text=\"grins and nods\" \n"
 			help += "|-- #$#mcp-say: text=\"We must move quickly.\" \n"
-			help += "|-- #$#mcp-whisper: name=\"Alice\" text=\"We must move quickly.\" \n"
+			help += "|-- #$#mcp-whisper: to=\"Alice\" text=\"We must move quickly.\" \n"
 			help += "|-- #$#mcp-narrate: text=\"The sky is clear and the birds are singing.\" \n"
 			help += "|-- #$#mcp-roll: dice=\"1d20+5\" reason=\"Stealth\" \n"
 			help += "|-- #$#mcp-stats \n"
@@ -248,20 +262,16 @@ func handleConnection(conn net.Conn) {
 			help += "|-- #$#mcp-go: direction=\"north\" \n"
 			help += "|-- #$#mcp-help \n"
 			help += "<!!--------------------------------!!> \n"
-
-			conn.Write([]byte(help))
+			conn.Write([]byte(game.Colorize(help, game.Purple)))
 		default:
-			conn.Write([]byte(fmt.Sprintf("Unknown MCP cmd: " + msg.Tag + "\n")))
+			unknown := fmt.Sprintf("Unknown MCP cmd: %s\n", msg.Tag)
+			conn.Write([]byte(game.ColorizeError(unknown)))
 		}
 
-		userPrompt(conn, player.Name, player.Room.Name)
+		conn.Write([]byte(game.PlayerPrompt(player.Name, player.Room.Name)))
 	}
 
 	if err := scanner.Err(); err != nil {
 		log.Printf("Connection error: %v", err)
 	}
-}
-
-func userPrompt(conn net.Conn, playerName string, roomName string) {
-	conn.Write([]byte(fmt.Sprintf("\n%s@%s +>> ", playerName, roomName)))
 }

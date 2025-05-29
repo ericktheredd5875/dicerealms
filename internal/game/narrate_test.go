@@ -31,7 +31,7 @@ func TestNarrate(t *testing.T) {
 	room.AddPlayer(alice)
 	room.AddPlayer(bob)
 
-	alice.Narrate("A shadow moves across the room.")
+	alice.Narrate("A shadow moves across the room.", alice.Name)
 
 	if !strings.Contains(bConn.String(), "<narritive> A shadow moves across the room.") {
 		t.Errorf("Bob did not receive the message: %s", bConn.String())
