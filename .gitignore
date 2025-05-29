@@ -32,3 +32,5 @@ mine.md
 # Scenes
 scenes/*
 
+# Logs
+logs/scenes/*.txt

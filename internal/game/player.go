@@ -2,7 +2,6 @@ package game
 
 import (
 	"fmt"
-	"log"
 	"net"
 	"strings"
 )
@@ -50,8 +49,8 @@ func (p *Player) ShowStats() string {
 func (p *Player) AssignStat(stat string) (string, error) {
 	stat = strings.ToUpper(stat)
 
-	log.Printf("Assigned stat: %s", stat)
-	log.Printf("Assigned stats: %v", p.AssignedStats)
+	// log.Printf("Assigned stat: %s", stat)
+	// log.Printf("Assigned stats: %v", p.AssignedStats)
 	if p.AssignedStats[stat] {
 		return "", fmt.Errorf("stat already assigned: %s", stat)
 	}

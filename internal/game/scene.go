@@ -6,6 +6,8 @@ import (
 	"path/filepath"
 	"strings"
 	"time"
+
+	"github.com/ericktheredd5875/dicerealms/config"
 )
 
 type Scene struct {
@@ -45,8 +47,8 @@ func (r *Room) EndScene(endedBy string) string {
 	summary := r.ActiveScene.Summary()
 
 	filename := fmt.Sprintf("scene_%s_%s.txt", sanitizeFileName(r.ActiveScene.Title), time.Now().Format("20060102_150405"))
-	path := filepath.Join("scenes", filename)
-	_ = os.MkdirAll("scenes", 0755)
+	path := filepath.Join(config.SceneDir, filename)
+	_ = os.MkdirAll(config.SceneDir, 0755)
 	err := os.WriteFile(path, []byte(summary), 0644)
 	if err != nil {
 		summary += fmt.Sprintf("Error writing scene file: %v", err)

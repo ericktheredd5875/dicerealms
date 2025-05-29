@@ -2,7 +2,6 @@ package game
 
 import (
 	"fmt"
-	"log"
 	"sync"
 )
 
@@ -61,7 +60,6 @@ func (r *Room) RemovePlayer(name string) {
 func (r *Room) Broadcast(msg string, sender string) {
 	r.mu.Lock()
 	defer r.mu.Unlock()
-	log.Printf("Sender: %s", sender)
 	for name, player := range r.Players {
 		if name != sender {
 			player.Conn.Write([]byte(Colorize("\n"+msg+"\n", Gray)))
