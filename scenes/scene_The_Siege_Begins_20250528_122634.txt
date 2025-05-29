@@ -1,8 +1,0 @@
-Scene: The Siege Begins
-Mood: tense
-Started By: Eric at 12:26PM
-
-Log:
-[12:26:20] <narritive> Horns sound in the distance...
-[12:26:28] Eric says, "To arms!"
-Ended By: Eric at 12:26PM
