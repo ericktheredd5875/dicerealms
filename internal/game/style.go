@@ -48,3 +48,7 @@ func ColorizeSuccess(text string) string {
 func ColorizeWarning(text string) string {
 	return Colorize(text, Yellow)
 }
+
+func ColorizeInfo(text string) string {
+	return Colorize(text, Blue)
+}

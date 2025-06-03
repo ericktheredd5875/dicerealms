@@ -5,11 +5,17 @@ import (
 	"fmt"
 	"log"
 	"net"
+	"os"
+	"os/signal"
 	"strings"
+	"syscall"
+	"time"
 
 	"github.com/ericktheredd5875/dicerealms/config"
 	"github.com/ericktheredd5875/dicerealms/internal/game"
 	"github.com/ericktheredd5875/dicerealms/internal/mcp"
+	"github.com/ericktheredd5875/dicerealms/internal/session"
+	"github.com/ericktheredd5875/dicerealms/pkg/utils"
 )
 
 // Temporary default room
@@ -37,10 +43,13 @@ func Start(addr string) error {
 	listener, err := net.Listen("tcp", addr)
 	if err != nil {
 		return err
+		// log.Printf("Error starting server: %v", err)
 	}
 	defer listener.Close()
 
 	log.Printf("Server listening on %s", addr)
+
+	go handleShutdown()
 
 	for {
 		conn, err := listener.Accept()
@@ -48,6 +57,9 @@ func Start(addr string) error {
 			log.Printf("Error accepting connection: %v", err)
 			continue
 		}
+
+		// nConn := NewConn(conn)
+		// go nConn.ReadLoop()
 
 		go handleConnection(conn)
 	}
@@ -57,18 +69,34 @@ func Start(addr string) error {
 func handleConnection(conn net.Conn) {
 
 	defer conn.Close()
+	_ = conn.SetDeadline(time.Time{})
+
+	s := session.NewSession(conn)
+	session.RegisterSession(s)
+	defer session.UnregisterSession(s)
+
+	reader := bufio.NewReader(conn)
+
 	log.Printf("New connection from %s", conn.RemoteAddr())
 
-	conn.Write([]byte("Welcome to DiceRealms!\n"))
+	// conn.Write([]byte("Welcome to DiceRealms!\n"))
+	s.Send("Welcome to DiceRealms!\n")
 
 	// Gather Player Name
-	conn.Write([]byte("Please enter your name: "))
-	scanner := bufio.NewScanner(conn)
-	if !scanner.Scan() {
+	// conn.Write([]byte("Please enter your name: "))
+	s.Send("Please enter your name >> ")
+	line, err := reader.ReadString('\n')
+	if err != nil {
 		return
 	}
 
-	name := strings.TrimSpace(scanner.Text())
+	name := strings.TrimSpace(line)
+	// scanner := bufio.NewScanner(conn)
+	// if !scanner.Scan() {
+	// 	return
+	// }
+
+	// name := strings.TrimSpace(scanner.Text())
 	if name == "" {
 		name = conn.RemoteAddr().String()
 	}
@@ -76,11 +104,20 @@ func handleConnection(conn net.Conn) {
 	log.Printf("Player name: %s", name)
 
 	// Create Player
+	pubID, _ := utils.GenerateKHash(name+":DiceRealms:Telnet:4000", "")
 	player := &game.Player{
 		Name:          name,
 		Conn:          conn,
 		AssignedStats: make(map[string]bool),
+		PublicID:      pubID,
 	}
+	s.Player = player
+
+	// defer func() {
+	// 	if err := player.Save(); err != nil {
+	// 		log.Printf("Error saving player: %v", err)
+	// 	}
+	// }()
 
 	roomTavern.AddPlayer(player)
 	conn.Write([]byte(
@@ -91,9 +128,16 @@ func handleConnection(conn net.Conn) {
 
 	// scanner := bufio.NewScanner(conn)
 	// conn.Write([]byte("+>> "))
-	for scanner.Scan() {
+	// for scanner.Scan() {
+	for {
 
-		line := scanner.Text()
+		// line := scanner.Text()
+		line, err := reader.ReadString('\n')
+		if err != nil {
+			log.Printf("Error reading line: %v", err)
+			break
+		}
+		line = strings.TrimSpace(line)
 		log.Printf("Received: %s", line)
 
 		msg, err := mcp.Parse(line)
@@ -116,6 +160,47 @@ func handleConnection(conn net.Conn) {
 		// conn.Write([]byte(fmt.Sprintf("Received MCP command: %s\n", msg.Tag)))
 
 		switch msg.Tag {
+		case "mcp-exit":
+			mcp.HandleMCPExit(msg.Args, player, s)
+		case "mcp-register":
+			mcp.HandleMCPRegister(msg.Args, player, player.Conn)
+			// name := msg.Args["name"]
+			// if name == "" {
+			// 	conn.Write([]byte(game.ColorizeError("Register must include 'name'.\n")))
+			// 	break
+			// }
+
+			// err := player.RegisterPlayer(name)
+			// if err != nil {
+			// 	conn.Write([]byte(game.ColorizeError("Error: " + err.Error() + "\n")))
+			// 	break
+			// }
+
+			// // player = regPlayer
+			// // player.Conn = conn
+			// // player.Room = roomTavern
+			// conn.Write([]byte(fmt.Sprintf(
+			// 	"Welcome, %s! Thank you for registering your character.\n", player.Name)))
+
+		case "mcp-login":
+			mcp.HandleMCPLogin(msg.Args, player, player.Conn)
+			// name := msg.Args["name"]
+			// if name == "" {
+			// 	conn.Write([]byte(game.ColorizeError("Login must include 'name'.\n")))
+			// 	break
+			// }
+
+			// loginPlayer, err := game.HandleLogin(name)
+			// if err != nil {
+			// 	conn.Write([]byte(game.ColorizeError("Error: " + err.Error() + "\n")))
+			// 	break
+			// }
+
+			// player = loginPlayer
+			// player.Conn = conn
+			// player.Room = roomTavern
+			// log.Printf("Player: %+v", player)
+			// conn.Write([]byte(fmt.Sprintf("Welcome back, %s!\n", player.Name)))
 		case "mcp-emote":
 			text := msg.Args["text"]
 			full := fmt.Sprintf("* %s %s", player.Name, text)
@@ -268,10 +353,21 @@ func handleConnection(conn net.Conn) {
 			conn.Write([]byte(game.ColorizeError(unknown)))
 		}
 
+		// log.Printf("Player: %s, Room: %s", player.Name, player.Room.Name)
 		conn.Write([]byte(game.PlayerPrompt(player.Name, player.Room.Name)))
 	}
 
-	if err := scanner.Err(); err != nil {
-		log.Printf("Connection error: %v", err)
-	}
+	// if err := scanner.Err(); err != nil {
+	// 	log.Printf("Connection error: %v", err)
+	// }
+}
+
+func handleShutdown() {
+	c := make(chan os.Signal, 1)
+	signal.Notify(c, os.Interrupt, syscall.SIGTERM)
+
+	<-c
+	log.Println("Server shutting down... saving players...")
+	session.SaveAllSessions()
+	os.Exit(0)
 }
