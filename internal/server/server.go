@@ -80,7 +80,10 @@ func handleConnection(conn net.Conn) {
 	log.Printf("New connection from %s", conn.RemoteAddr())
 
 	// conn.Write([]byte("Welcome to DiceRealms!\n"))
-	s.Send("Welcome to DiceRealms!\n")
+	// s.Send("Welcome to DiceRealms!\n")
+	s.Send(game.Colorize(config.WelcomeBanner, game.Blue+game.Bold))
+	s.Send(game.Colorize(config.TagLine, game.Cyan) + "\n\n")
+	s.Send(game.Colorize(config.WelcomePrompt, game.Yellow+game.Bold) + "\n")
 
 	// Gather Player Name
 	// conn.Write([]byte("Please enter your name: "))
@@ -329,25 +332,26 @@ func handleConnection(conn net.Conn) {
 				conn.Write([]byte(game.Colorize("ANSI support enabled.\n", game.Green)))
 			}
 		case "mcp-help":
-			help := "\n<!!--------------------------------!!> \n"
-			help += "+-- DiceRealms Commands:\n"
-			help += "<!!--------------------------------!!> \n"
-			help += "|-- #$#mcp-emote: text=\"grins and nods\" \n"
-			help += "|-- #$#mcp-say: text=\"We must move quickly.\" \n"
-			help += "|-- #$#mcp-whisper: to=\"Alice\" text=\"We must move quickly.\" \n"
-			help += "|-- #$#mcp-narrate: text=\"The sky is clear and the birds are singing.\" \n"
-			help += "|-- #$#mcp-roll: dice=\"1d20+5\" reason=\"Stealth\" \n"
-			help += "|-- #$#mcp-stats \n"
-			help += "|---- #$#mcp-stat: roll=\"STR\" \n"
-			help += "|---- #$#mcp-stat-gen \n"
-			help += "|-- #$#mcp-inventory \n"
-			help += "|---- #$#mcp-take: item=\"sword\" \n"
-			help += "|---- #$#mcp-drop: item=\"sword\" \n"
-			help += "|-- #$#mcp-look \n"
-			help += "|-- #$#mcp-go: direction=\"north\" \n"
-			help += "|-- #$#mcp-help \n"
-			help += "<!!--------------------------------!!> \n"
-			conn.Write([]byte(game.Colorize(help, game.Purple)))
+			s.Send(config.Menu)
+			// help := "\n<!!--------------------------------!!> \n"
+			// help += "+-- DiceRealms Commands:\n"
+			// help += "<!!--------------------------------!!> \n"
+			// help += "|-- #$#mcp-emote: text=\"grins and nods\" \n"
+			// help += "|-- #$#mcp-say: text=\"We must move quickly.\" \n"
+			// help += "|-- #$#mcp-whisper: to=\"Alice\" text=\"We must move quickly.\" \n"
+			// help += "|-- #$#mcp-narrate: text=\"The sky is clear and the birds are singing.\" \n"
+			// help += "|-- #$#mcp-roll: dice=\"1d20+5\" reason=\"Stealth\" \n"
+			// help += "|-- #$#mcp-stats \n"
+			// help += "|---- #$#mcp-stat: roll=\"STR\" \n"
+			// help += "|---- #$#mcp-stat-gen \n"
+			// help += "|-- #$#mcp-inventory \n"
+			// help += "|---- #$#mcp-take: item=\"sword\" \n"
+			// help += "|---- #$#mcp-drop: item=\"sword\" \n"
+			// help += "|-- #$#mcp-look \n"
+			// help += "|-- #$#mcp-go: direction=\"north\" \n"
+			// help += "|-- #$#mcp-help \n"
+			// help += "<!!--------------------------------!!> \n"
+			// conn.Write([]byte(game.Colorize(help, game.Purple)))
 		default:
 			unknown := fmt.Sprintf("Unknown MCP cmd: %s\n", msg.Tag)
 			conn.Write([]byte(game.ColorizeError(unknown)))
