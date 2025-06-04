@@ -2,12 +2,13 @@ package game
 
 import (
 	"fmt"
+	"log"
 	"net"
 	"strings"
+	"time"
 
 	"github.com/ericktheredd5875/dicerealms/internal/db"
 	"github.com/ericktheredd5875/dicerealms/pkg/utils"
-	"gorm.io/gorm"
 )
 
 type Stats struct {
@@ -33,11 +34,14 @@ type Player struct {
 	XP        int
 	//Tracks which stats have been set
 	AssignedStats map[string]bool
+	Model         *db.PlayerModel
+	LastActiveAt  time.Time
+	RoomID        int
 }
 
 func PlayerPrompt(playerName string, roomName string) string {
 
-	prompt := Colorize("%s@%s +>>", Bold+Cyan)
+	prompt := utils.Colorize("%s@%s +>>", utils.Bold+utils.Cyan)
 	prompt = fmt.Sprintf("\n"+prompt, playerName, roomName)
 	return prompt
 }
@@ -134,25 +138,30 @@ func (p *Player) InventoryList() string {
 }
 
 func (p *Player) Save() error {
-	model := db.PlayerModel{
-		Model:     gorm.Model{ID: p.ID},
-		PublicID:  p.PublicID,
-		Name:      p.Name,
-		STR:       p.Stats.STR,
-		DEX:       p.Stats.DEX,
-		CON:       p.Stats.CON,
-		INT:       p.Stats.INT,
-		WIS:       p.Stats.WIS,
-		CHA:       p.Stats.CHA,
-		Inventory: p.Inventory,
-		Equipped:  p.Equipped,
-		Gold:      p.Gold,
-		Level:     p.Level,
-		XP:        p.XP,
-		// RoomID: p.Room.ID,
-	}
+	// model := db.PlayerModel{
+	// 	Model:     gorm.Model{ID: p.ID},
+	// 	PublicID:  p.PublicID,
+	// 	Name:      p.Name,
+	// 	STR:       p.Stats.STR,
+	// 	DEX:       p.Stats.DEX,
+	// 	CON:       p.Stats.CON,
+	// 	INT:       p.Stats.INT,
+	// 	WIS:       p.Stats.WIS,
+	// 	CHA:       p.Stats.CHA,
+	// 	Inventory: p.Inventory,
+	// 	Equipped:  p.Equipped,
+	// 	Gold:      p.Gold,
+	// 	Level:     p.Level,
+	// 	XP:        p.XP,
+	// 	RoomID:    p.Room.ID,
+	// }
 
-	return db.DB.Save(&model).Error
+	// p.Conn.Write([]byte(fmt.Sprintf("Saving player %s...", p.Name)))
+	log.Printf("Saving player %s...", p.Name)
+	UpdateModelFromPlayer(p)
+	log.Printf("Player model: %+v", p.Model)
+
+	return db.DB.Save(p.Model).Error
 }
 
 func HandleLogin(name string) (*Player, error) {
@@ -161,54 +170,7 @@ func HandleLogin(name string) (*Player, error) {
 		return nil, err
 	}
 
-	player := &Player{
-		ID:       model.ID,
-		PublicID: model.PublicID,
-		Name:     model.Name,
-		Stats: Stats{
-			STR: model.STR,
-			DEX: model.DEX,
-			CON: model.CON,
-			INT: model.INT,
-			WIS: model.WIS,
-			CHA: model.CHA,
-		},
-		Inventory:     model.Inventory,
-		Equipped:      model.Equipped,
-		Gold:          model.Gold,
-		Level:         model.Level,
-		XP:            model.XP,
-		AssignedStats: map[string]bool{},
-	}
-
-	for _, stat := range validStats {
-		switch stat {
-		case "STR":
-			if player.Stats.STR > 0 {
-				player.AssignedStats[stat] = true
-			}
-		case "DEX":
-			if player.Stats.DEX > 0 {
-				player.AssignedStats[stat] = true
-			}
-		case "CON":
-			if player.Stats.CON > 0 {
-				player.AssignedStats[stat] = true
-			}
-		case "INT":
-			if player.Stats.INT > 0 {
-				player.AssignedStats[stat] = true
-			}
-		case "WIS":
-			if player.Stats.WIS > 0 {
-				player.AssignedStats[stat] = true
-			}
-		case "CHA":
-			if player.Stats.CHA > 0 {
-				player.AssignedStats[stat] = true
-			}
-		}
-	}
+	player := ToPlayer(&model)
 
 	return player, nil
 }
@@ -220,6 +182,9 @@ func (p *Player) RegisterPlayer(name string) error {
 		PublicID: pubID,
 	}
 
+	log.Printf("Registering player %s...", name)
+	log.Printf("Model: %+v", model)
+
 	if err := db.DB.Create(&model).Error; err != nil {
 		return err
 	}
@@ -227,33 +192,81 @@ func (p *Player) RegisterPlayer(name string) error {
 	p.ID = model.ID
 	p.PublicID = model.PublicID
 	p.Name = model.Name
+	p.Model = &model
 
 	return nil
-	// return &Player{
-	// 	ID:       model.ID,
-	// 	PublicID: model.PublicID,
-	// 	Name:     model.Name,
-	// 	// Stats: Stats{
-	// 	// 	STR: model.STR,
-	// 	// 	DEX: model.DEX,
-	// 	// 	CON: model.CON,
-	// 	// 	INT: model.INT,
-	// 	// 	WIS: model.WIS,
-	// 	// 	CHA: model.CHA,
-	// 	// },
-	// 	// Inventory:     model.Inventory,
-	// 	// Equipped:      model.Equipped,
-	// 	// Gold:          model.Gold,
-	// 	// Level:         model.Level,
-	// 	// XP:            model.XP,
-	// 	AssignedStats: map[string]bool{},
-	// }, nil
 }
 
 func JoinRoom(player *Player, room *Room, conn net.Conn) {
-	// player.Room = room
+
+	player.Room = room
 	player.Conn = conn
 	room.AddPlayer(player)
 	conn.Write([]byte(fmt.Sprintf("Welcome to %s!", room.Name)))
 
+}
+
+func ToPlayer(model *db.PlayerModel) *Player {
+	stats := map[string]int{
+		"STR": int(model.STR),
+		"DEX": int(model.DEX),
+		"CON": int(model.CON),
+		"INT": int(model.INT),
+		"WIS": int(model.WIS),
+		"CHA": int(model.CHA),
+	}
+
+	assignedStats := map[string]bool{}
+	for _, stat := range validStats {
+		if stats[stat] > 0 {
+			assignedStats[stat] = true
+		}
+	}
+
+	return &Player{
+		ID:       model.ID,
+		PublicID: model.PublicID,
+		Name:     model.Name,
+		Stats: Stats{
+			STR: stats["STR"],
+			DEX: stats["DEX"],
+			CON: stats["CON"],
+			INT: stats["INT"],
+			WIS: stats["WIS"],
+		},
+		Inventory:     model.Inventory,
+		Equipped:      model.Equipped,
+		Gold:          model.Gold,
+		Level:         model.Level,
+		XP:            model.XP,
+		AssignedStats: assignedStats,
+		RoomID:        model.LastRoomID,
+		Model:         model,
+	}
+}
+
+func UpdateModelFromPlayer(player *Player) {
+
+	if player.Model == nil {
+		return
+	}
+
+	log.Printf("Updating model from player %s...", player.Name)
+
+	player.Model.STR = int(player.Stats.STR)
+	player.Model.DEX = int(player.Stats.DEX)
+	player.Model.CON = int(player.Stats.CON)
+	player.Model.INT = int(player.Stats.INT)
+	player.Model.WIS = int(player.Stats.WIS)
+	player.Model.CHA = int(player.Stats.CHA)
+
+	player.Model.Inventory = player.Inventory
+	player.Model.Equipped = player.Equipped
+	player.Model.Gold = player.Gold
+	player.Model.Level = player.Level
+	player.Model.XP = player.XP
+
+	if player.Room != nil {
+		player.Model.LastRoomID = player.Room.ID
+	}
 }

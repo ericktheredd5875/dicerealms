@@ -7,21 +7,21 @@ import (
 
 type PlayerModel struct {
 	gorm.Model
-	PublicID  string         `gorm:"uniqueIndex:not null"`
-	Name      string         `gorm:"not null"`
-	STR       int            `gorm:"default:0"`
-	DEX       int            `gorm:"default:0"`
-	CON       int            `gorm:"default:0"`
-	INT       int            `gorm:"default:0"`
-	WIS       int            `gorm:"default:0"`
-	CHA       int            `gorm:"default:0"`
-	Inventory pq.StringArray `gorm:"type:text[]"`
-	Equipped  pq.StringArray `gorm:"type:text[]"`
-	Gold      int            `gorm:"default:0"`
-	Level     int            `gorm:"default:1"`
-	XP        int            `gorm:"default:0"`
-	RoomID    int
-	// LastRoom  RoomModel `gorm:"foreignKey:RoomID"`
+	PublicID   string         `gorm:"uniqueIndex:not null"`
+	Name       string         `gorm:"not null"`
+	STR        int            `gorm:"default:0"`
+	DEX        int            `gorm:"default:0"`
+	CON        int            `gorm:"default:0"`
+	INT        int            `gorm:"default:0"`
+	WIS        int            `gorm:"default:0"`
+	CHA        int            `gorm:"default:0"`
+	Inventory  pq.StringArray `gorm:"type:text[]"`
+	Equipped   pq.StringArray `gorm:"type:text[]"`
+	Gold       int            `gorm:"default:0"`
+	Level      int            `gorm:"default:1"`
+	XP         int            `gorm:"default:0"`
+	RoomID     int
+	LastRoomID int
 }
 
 type RoomModel struct {
@@ -29,6 +29,8 @@ type RoomModel struct {
 	RoomName    string `gorm:"not null"`
 	Description string
 	Exits       pq.StringArray `gorm:"type:text[]"`
+	JoinMsg     string
+	LeaveMsg    string
 }
 
 type ItemModel struct {

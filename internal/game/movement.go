@@ -2,12 +2,14 @@ package game
 
 import (
 	"fmt"
+
+	"github.com/ericktheredd5875/dicerealms/pkg/utils"
 )
 
 func (p *Player) Move(dir string) (string, error) {
-	p.Room.mu.Lock()
+	p.Room.Mu.Lock()
 	targetRoom, ok := p.Room.Exits[dir]
-	p.Room.mu.Unlock()
+	p.Room.Mu.Unlock()
 
 	if !ok {
 		return "", fmt.Errorf("you can't go %s from here", dir)
@@ -21,5 +23,5 @@ func (p *Player) Move(dir string) (string, error) {
 	p.Room = targetRoom
 
 	msg := fmt.Sprintf("---\nYou move %s into %s.\n", dir, targetRoom.Name)
-	return Colorize(msg, Gray), nil
+	return utils.Colorize(msg, utils.Gray), nil
 }

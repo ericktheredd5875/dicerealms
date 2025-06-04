@@ -21,7 +21,7 @@ type Scene struct {
 }
 
 func (r *Room) StartScene(title string, mood, startedBy string) {
-	r.mu.Lock()
+	r.Mu.Lock()
 
 	r.ActiveScene = &Scene{
 		Title:     title,
@@ -30,13 +30,13 @@ func (r *Room) StartScene(title string, mood, startedBy string) {
 		StartedAt: time.Now(),
 		Log:       []string{},
 	}
-	r.mu.Unlock()
+	r.Mu.Unlock()
 
 	r.Broadcast(fmt.Sprintf("<new> Scene started: %s [%s]", title, mood), "")
 }
 
 func (r *Room) EndScene(endedBy string) string {
-	r.mu.Lock()
+	r.Mu.Lock()
 
 	if r.ActiveScene == nil {
 		return "No active scene to end."
@@ -56,7 +56,7 @@ func (r *Room) EndScene(endedBy string) string {
 		summary += fmt.Sprintf("Scene saved to %s", path)
 	}
 
-	r.mu.Unlock()
+	r.Mu.Unlock()
 
 	r.ActiveScene = nil
 	r.Broadcast("<end> Scene ended", "")

@@ -33,6 +33,8 @@ func InitDB() error {
 		&SceneLogModel{},
 	)
 
+	SeedRooms(DB)
+
 	if err != nil {
 		return fmt.Errorf("failed to migrate models: %w", err)
 	}

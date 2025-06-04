@@ -7,6 +7,8 @@ import (
 	"strconv"
 	"strings"
 	"time"
+
+	"github.com/ericktheredd5875/dicerealms/pkg/utils"
 )
 
 var diceExpr = regexp.MustCompile(`^(\d+)d(\d+)([+-]\d+)?$`)
@@ -60,10 +62,10 @@ func Roll(expr string) (int, string, error) {
 
 	if criticalSuccess != "" {
 		details += criticalSuccess
-		details = Colorize(details, Green)
+		details = utils.Colorize(details, utils.Green)
 	} else if criticalFailure != "" {
 		details += criticalFailure
-		details = Colorize(details, Red)
+		details = utils.Colorize(details, utils.Red)
 	}
 
 	return total, details, nil

@@ -4,12 +4,14 @@ import (
 	"fmt"
 	"log"
 	"strings"
+
+	"github.com/ericktheredd5875/dicerealms/pkg/utils"
 )
 
 func (p *Player) Look() string {
 	r := p.Room
-	r.mu.Lock()
-	defer r.mu.Unlock()
+	r.Mu.Lock()
+	defer r.Mu.Unlock()
 
 	var builder strings.Builder
 	builder.WriteString(fmt.Sprintf("---\n|- %s\n %s\n---\n", r.Name, r.Desc))
@@ -39,5 +41,5 @@ func (p *Player) Look() string {
 		}
 	}
 
-	return Colorize(builder.String(), Gray)
+	return utils.Colorize(builder.String(), utils.Gray)
 }
