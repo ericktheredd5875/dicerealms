@@ -3,11 +3,11 @@ package game
 import (
 	"fmt"
 	"log"
-	"net"
 	"strings"
 	"time"
 
 	"github.com/ericktheredd5875/dicerealms/internal/db"
+	"github.com/ericktheredd5875/dicerealms/internal/netiface"
 	"github.com/ericktheredd5875/dicerealms/pkg/utils"
 )
 
@@ -24,7 +24,7 @@ type Player struct {
 	ID        uint
 	PublicID  string
 	Name      string
-	Conn      net.Conn
+	Conn      netiface.GameConn
 	Room      *Room
 	Stats     Stats
 	Inventory []string
@@ -197,7 +197,7 @@ func (p *Player) RegisterPlayer(name string) error {
 	return nil
 }
 
-func JoinRoom(player *Player, room *Room, conn net.Conn) {
+func JoinRoom(player *Player, room *Room, conn netiface.GameConn) {
 
 	player.Room = room
 	player.Conn = conn

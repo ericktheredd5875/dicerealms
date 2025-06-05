@@ -5,6 +5,8 @@ import (
 	"strings"
 	"testing"
 	"time"
+
+	"github.com/ericktheredd5875/dicerealms/internal/netiface"
 )
 
 type dummyConn struct{}
@@ -27,8 +29,8 @@ func TestLook(t *testing.T) {
 		"A bright field under a blue sky.")
 	room.Exits["east"] = otherRoom
 
-	alice := &Player{Name: "Alice", Conn: &dummyConn{}}
-	bob := &Player{Name: "Bob", Conn: &dummyConn{}}
+	alice := &Player{Name: "Alice", Conn: &netiface.TelnetConn{Conn: &dummyConn{}}}
+	bob := &Player{Name: "Bob", Conn: &netiface.TelnetConn{Conn: &dummyConn{}}}
 
 	room.AddPlayer(alice)
 	room.AddPlayer(bob)

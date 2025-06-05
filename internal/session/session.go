@@ -3,19 +3,19 @@ package session
 import (
 	"bufio"
 	"log"
-	"net"
 
 	"github.com/ericktheredd5875/dicerealms/internal/game"
+	"github.com/ericktheredd5875/dicerealms/internal/netiface"
 	"github.com/ericktheredd5875/dicerealms/pkg/utils"
 )
 
 type Session struct {
-	Conn   net.Conn
+	Conn   netiface.GameConn
 	Writer *bufio.Writer
 	Player *game.Player
 }
 
-func NewSession(conn net.Conn) *Session {
+func NewSession(conn netiface.GameConn) *Session {
 	return &Session{
 		Conn:   conn,
 		Writer: bufio.NewWriter(conn),
@@ -23,6 +23,8 @@ func NewSession(conn net.Conn) *Session {
 }
 
 func (s *Session) Send(msg string) {
+
+	// s.Conn.Write([]byte(msg))
 	s.Writer.WriteString(msg)
 	s.Writer.Flush()
 }

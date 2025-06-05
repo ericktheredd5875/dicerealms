@@ -8,6 +8,7 @@ import (
 	"time"
 
 	"github.com/ericktheredd5875/dicerealms/config"
+	"github.com/ericktheredd5875/dicerealms/internal/netiface"
 )
 
 type mockConn struct {
@@ -33,8 +34,8 @@ func TestRoomBroadcast(t *testing.T) {
 	aliceConn := &mockConn{}
 	bobConn := &mockConn{}
 
-	alice := &Player{Name: "Alice", Conn: aliceConn}
-	bob := &Player{Name: "Bob", Conn: bobConn}
+	alice := &Player{Name: "Alice", Conn: &netiface.TelnetConn{Conn: aliceConn}}
+	bob := &Player{Name: "Bob", Conn: &netiface.TelnetConn{Conn: bobConn}}
 
 	room.AddPlayer(alice)
 	room.AddPlayer(bob)

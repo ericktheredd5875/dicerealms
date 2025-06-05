@@ -5,6 +5,8 @@ import (
 	"strings"
 	"testing"
 	"time"
+
+	"github.com/ericktheredd5875/dicerealms/internal/netiface"
 )
 
 type sayBufferConn struct {
@@ -28,8 +30,8 @@ func TestSay(t *testing.T) {
 	aConn := &sayBufferConn{}
 	bConn := &sayBufferConn{}
 
-	alice := &Player{Name: "Alice", Conn: aConn}
-	bob := &Player{Name: "Bob", Conn: bConn}
+	alice := &Player{Name: "Alice", Conn: &netiface.TelnetConn{Conn: aConn}}
+	bob := &Player{Name: "Bob", Conn: &netiface.TelnetConn{Conn: bConn}}
 
 	room.AddPlayer(alice)
 	room.AddPlayer(bob)

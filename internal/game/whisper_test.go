@@ -5,6 +5,8 @@ import (
 	"strings"
 	"testing"
 	"time"
+
+	"github.com/ericktheredd5875/dicerealms/internal/netiface"
 )
 
 type whisperBufferConn struct {
@@ -28,8 +30,8 @@ func TestWhisper(t *testing.T) {
 	aConn := &whisperBufferConn{}
 	bConn := &whisperBufferConn{}
 
-	alice := &Player{Name: "Alice", Conn: aConn}
-	bob := &Player{Name: "Bob", Conn: bConn}
+	alice := &Player{Name: "Alice", Conn: &netiface.TelnetConn{Conn: aConn}}
+	bob := &Player{Name: "Bob", Conn: &netiface.TelnetConn{Conn: bConn}}
 
 	room.AddPlayer(alice)
 	room.AddPlayer(bob)

@@ -17,7 +17,7 @@ const WelcomeBanner = `
 `
 
 const TagLine = `
-	A realm of shared imagination, structured storytelling, and dice-fueled destiny.`
+	🎲 A realm of shared imagination, structured storytelling, and dice-fueled destiny.`
 
 const WelcomePrompt = `Type: #$#mcp-help to begin your journey.`
 

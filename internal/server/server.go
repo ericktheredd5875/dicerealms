@@ -1,20 +1,18 @@
 package server
 
 import (
-	"bufio"
 	"fmt"
 	"log"
-	"net"
 	"os"
 	"os/signal"
 	"strings"
 	"syscall"
-	"time"
 
 	"github.com/ericktheredd5875/dicerealms/config"
 	"github.com/ericktheredd5875/dicerealms/internal/db"
 	"github.com/ericktheredd5875/dicerealms/internal/game"
 	"github.com/ericktheredd5875/dicerealms/internal/mcp"
+	"github.com/ericktheredd5875/dicerealms/internal/netiface"
 	"github.com/ericktheredd5875/dicerealms/internal/session"
 	"github.com/ericktheredd5875/dicerealms/pkg/utils"
 )
@@ -38,39 +36,40 @@ import (
 // 	roomStreet.Exits["south"] = roomTavern
 // }
 
-func Start(addr string) error {
+func Start(conn netiface.GameConn) error {
 
 	// Start TDP server
-	listener, err := net.Listen("tcp", addr)
-	if err != nil {
-		return err
-		// log.Printf("Error starting server: %v", err)
-	}
-	defer listener.Close()
+	// listener, err := net.Listen("tcp", addr)
+	// if err != nil {
+	// 	return err
+	// 	// log.Printf("Error starting server: %v", err)
+	// }
+	// defer listener.Close()
 
-	log.Printf("Server listening on %s", addr)
+	// log.Printf("Server listening on %s", addr)
 
-	go handleShutdown()
+	// go HandleShutdown()
 
-	for {
-		conn, err := listener.Accept()
-		if err != nil {
-			log.Printf("Error accepting connection: %v", err)
-			continue
-		}
+	// for {
+	// 	conn, err := listener.Accept()
+	// 	if err != nil {
+	// 		log.Printf("Error accepting connection: %v", err)
+	// 		continue
+	// 	}
 
-		// nConn := NewConn(conn)
-		// go nConn.ReadLoop()
+	// 	// nConn := NewConn(conn)
+	// 	// go nConn.ReadLoop()
 
-		go handleConnection(conn)
-	}
+	// 	go handleConnection(conn)
+	// }
+	return nil
 
 }
 
-func handleConnection(conn net.Conn) {
+func HandleConnection(conn netiface.GameConn) {
 
 	defer conn.Close()
-	_ = conn.SetDeadline(time.Time{})
+	// _ = conn.SetDeadline(time.Time{})
 
 	// Start Sessions
 	s := session.NewSession(conn)
@@ -83,10 +82,6 @@ func handleConnection(conn net.Conn) {
 	log.Printf("Tavern: %v", tavern)
 	log.Printf("Tavern ID: %d", tavern.ID)
 
-	reader := bufio.NewReader(conn)
-
-	log.Printf("New connection from %s", conn.RemoteAddr())
-
 	s.Send(utils.Colorize(config.WelcomeBanner, utils.Blue+utils.Bold))
 	s.Send(utils.Colorize(config.TagLine, utils.Cyan) + "\n\n")
 	s.Send(utils.Colorize(config.WelcomePrompt, utils.Yellow+utils.Bold) + "\n\n")
@@ -94,7 +89,9 @@ func handleConnection(conn net.Conn) {
 	// Gather Player Name
 	// conn.Write([]byte("Please enter your name: "))
 	s.Send("Please enter your name >> ")
-	line, err := reader.ReadString('\n')
+	// reader := bufio.NewReader(conn)
+	// line, err := reader.ReadString('\n')
+	line, err := conn.ReadLine()
 	if err != nil {
 		return
 	}
@@ -107,7 +104,9 @@ func handleConnection(conn net.Conn) {
 
 	// name := strings.TrimSpace(scanner.Text())
 	if name == "" {
+		// name = conn.RemoteAddr().String()
 		name = conn.RemoteAddr().String()
+		// name = "Unknown"
 	}
 
 	log.Printf("Player name: %s", name)
@@ -144,7 +143,8 @@ func handleConnection(conn net.Conn) {
 	for {
 
 		// line := scanner.Text()
-		line, err := reader.ReadString('\n')
+		// line, err := reader.ReadString('\n')
+		line, err := conn.ReadLine()
 		if err != nil {
 			log.Printf("Error reading line: %v", err)
 			break
@@ -323,7 +323,7 @@ func handleConnection(conn net.Conn) {
 	// }
 }
 
-func handleShutdown() {
+func HandleShutdown() {
 	c := make(chan os.Signal, 1)
 	signal.Notify(c, os.Interrupt, syscall.SIGTERM)
 

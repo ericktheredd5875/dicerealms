@@ -100,6 +100,11 @@ MIT — feel free to fork and build your own realms.
 * [x] Store narration logs by scene or timestamp.
 * [ ] Stats: show a reminder of how to improve them later.
 * [ ] mcp-stat-reset for DM use
+* [ ] Password or public key auth
+* [ ] Player authentication (tie SSH login to in-game identity)
+* [ ] Session logging
+* [ ] Multiple ports (e.g., 4000 for Telnet, 2222 for SSH)
+* [ ] Color support (many SSH clients are ANSI-capable!)
 
 ---
 

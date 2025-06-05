@@ -5,6 +5,8 @@ import (
 	"strings"
 	"testing"
 	"time"
+
+	"github.com/ericktheredd5875/dicerealms/internal/netiface"
 )
 
 type narrateConn struct {
@@ -25,8 +27,8 @@ func TestNarrate(t *testing.T) {
 	aConn := &narrateConn{}
 	bConn := &narrateConn{}
 
-	alice := &Player{Name: "Alice", Room: room, Conn: aConn}
-	bob := &Player{Name: "Bob", Room: room, Conn: bConn}
+	alice := &Player{Name: "Alice", Room: room, Conn: &netiface.TelnetConn{Conn: aConn}}
+	bob := &Player{Name: "Bob", Room: room, Conn: &netiface.TelnetConn{Conn: bConn}}
 
 	room.AddPlayer(alice)
 	room.AddPlayer(bob)
