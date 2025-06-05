@@ -83,7 +83,7 @@ MIT — feel free to fork and build your own realms.
 
 ## 🧠 Future Roadmap
 
-* [ ] Player commands: ~~`look`~~, ~~`move`~~, ~~`inventory`~~
+* [x] Player commands: ~~`look`~~, ~~`move`~~, ~~`inventory`~~
 * [ ] DM tools: `mcp-narrate`, scene control
 * [ ] WebSocket/Discord client
 * [ ] Persistent storage with PostgreSQL
@@ -103,8 +103,12 @@ MIT — feel free to fork and build your own realms.
 * [ ] Password or public key auth
 * [ ] Player authentication (tie SSH login to in-game identity)
 * [ ] Session logging
-* [ ] Multiple ports (e.g., 4000 for Telnet, 2222 for SSH)
-* [ ] Color support (many SSH clients are ANSI-capable!)
+* [x] Multiple ports (e.g., 4000 for Telnet, 2222 for SSH)
+* [x] Color support (many SSH clients are ANSI-capable!)
+* [ ] Store login history in DB (LoginAuditModel)
+* [ ] Detect duplicate IPs
+* [ ] Track duration of session
+* [ ] Rate-limit brute force attempts (via firewall or middleware)
 
 ---
 

@@ -3,16 +3,14 @@ package game
 import (
 	"log"
 
-	"gorm.io/gorm"
-
 	"github.com/ericktheredd5875/dicerealms/internal/db"
 )
 
 var itemRegistry = make(map[string]*db.ItemModel)
 
-func LoadAllItems(gdb *gorm.DB) {
+func LoadAllItems() {
 	items := []db.ItemModel{}
-	if err := gdb.Find(&items).Error; err != nil {
+	if err := db.DB.Find(&items).Error; err != nil {
 		log.Printf("Failed to load items: %v", err)
 		return
 	}

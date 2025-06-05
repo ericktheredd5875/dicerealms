@@ -13,6 +13,9 @@ import (
 	"github.com/ericktheredd5875/dicerealms/pkg/utils"
 )
 
+/**
+* Telnet Server
+ */
 func startTelnetServer(addr string) {
 	ln, err := net.Listen("tcp", addr)
 	if err != nil {
@@ -30,6 +33,9 @@ func startTelnetServer(addr string) {
 	}
 }
 
+/**
+* SSH Server
+ */
 func startSSHServer(addr string) {
 
 	sshServer := &ssh.Server{
@@ -63,6 +69,9 @@ func startSSHServer(addr string) {
 	}
 }
 
+/**
+* Main
+ */
 func main() {
 	go server.HandleShutdown()
 	log.Println("Starting DiceRealms server...")
@@ -76,11 +85,6 @@ func main() {
 
 	sshPort := utils.ObtainEnv("SSH_PORT", "2222")
 	go startSSHServer(":" + sshPort)
-
-	// err := server.Start(":" + port)
-	// if err != nil {
-	// 	log.Fatal(err)
-	// }
 
 	select {}
 }
