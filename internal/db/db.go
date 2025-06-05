@@ -32,11 +32,13 @@ func InitDB() error {
 		&SceneModel{},
 		&SceneLogModel{},
 	)
-
-	SeedRooms(DB)
-
 	if err != nil {
 		return fmt.Errorf("failed to migrate models: %w", err)
+	}
+
+	SeedRooms(DB)
+	if err := LoadItems(DB, "logs/items/dnd_items.json"); err != nil {
+		log.Printf("Item seeding failed: %v", err)
 	}
 
 	log.Println("Database schema migrated")

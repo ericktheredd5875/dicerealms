@@ -1,12 +1,25 @@
 package db
 
 import (
+	"encoding/json"
 	"errors"
+	"fmt"
 	"log"
+	"os"
 
+	"github.com/ericktheredd5875/dicerealms/pkg/utils"
 	"github.com/lib/pq"
 	"gorm.io/gorm"
 )
+
+type SeedItem struct {
+	Name        string `json:"Name"`
+	Description string `json:"Description"`
+	Rarity      string `json:"Rarity"`
+	Effect      string `json:"Effect"`
+	Category    string `json:"Category"`
+	RoomFound   string `json:"RoomFound"`
+}
 
 var initRooms = []RoomModel{
 	{
@@ -42,4 +55,45 @@ func SeedRooms(db *gorm.DB) {
 			}
 		}
 	}
+}
+
+func LoadItems(db *gorm.DB, filePath string) error {
+	data, err := os.ReadFile(filePath)
+	if err != nil {
+		return fmt.Errorf("failed to read items file: %w", err)
+	}
+
+	var items []SeedItem
+	if err := json.Unmarshal(data, &items); err != nil {
+		return fmt.Errorf("failed to unmarshal items: %w", err)
+	}
+
+	for _, i := range items {
+
+		ItemID, _ := utils.GenerateKHash(i.Name+":DiceRealms:Items:4000", "")
+		item := ItemModel{
+			ItemID:      ItemID,
+			Name:        i.Name,
+			Description: i.Description,
+			Rarity:      i.Rarity,
+			Effect:      i.Effect,
+			Category:    i.Category,
+			RoomFoundID: 0,
+		}
+
+		if i.RoomFound != "" {
+			var room RoomModel
+			if err := db.Where("room_name = ?", i.RoomFound).First(&room).Error; err != nil {
+				item.RoomFoundID = room.ID
+			}
+		}
+
+		var existing ItemModel
+		if err := db.Where("name = ?", item.Name).First(&existing).Error; errors.Is(err, gorm.ErrRecordNotFound) {
+			db.Create(&item)
+		}
+	}
+
+	log.Printf("Loaded %d items", len(items))
+	return nil
 }

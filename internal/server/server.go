@@ -171,11 +171,11 @@ func handleConnection(conn net.Conn) {
 
 		switch msg.Tag {
 		case "mcp-exit":
-			mcp.HandleMCPExit(msg.Args, player, s)
+			mcp.HandleExit(msg.Args, player, s)
 		case "mcp-register":
-			mcp.HandleMCPRegister(msg.Args, player, s)
+			mcp.HandleRegister(msg.Args, player, s)
 		case "mcp-login":
-			mcp.HandleMCPLogin(msg.Args, player, s)
+			mcp.HandleLogin(msg.Args, player, s)
 		case "mcp-emote":
 			text := msg.Args["text"]
 			full := fmt.Sprintf("* %s %s", player.Name, text)
@@ -259,42 +259,27 @@ func handleConnection(conn net.Conn) {
 				conn.Write([]byte("Auto-generated stats: \n" + result + "\n"))
 			}
 		case "mcp-inventory", "mcp-inv":
-			conn.Write([]byte(player.InventoryList()))
-		case "mcp-take":
-			item := msg.Args["item"]
-			if item == "" {
-				conn.Write([]byte(utils.ColorizeError("Take must include 'item'.\n")))
-				break
-			}
-
-			player.AddItem(item)
-			msg := fmt.Sprintf("You picked up %s.\n", item)
-			conn.Write([]byte(utils.Colorize(msg, utils.Green)))
+			mcp.HandleInventory(player, s)
+			// conn.Write([]byte(player.InventoryList()))
+		case "mcp-take", "mcp-pickup":
+			mcp.HandlePickup(msg.Args, player, s)
 		case "mcp-drop":
-			item := msg.Args["item"]
-			if item == "" {
-				conn.Write([]byte(utils.ColorizeError("Drop must include 'item'.\n")))
-				break
-			}
-
-			dropped := player.RemoveItem(item)
-			if dropped {
-				msg := fmt.Sprintf("You dropped %s.\n", item)
-				conn.Write([]byte(utils.Colorize(msg, utils.Red+utils.Bold)))
-			} else {
-				conn.Write([]byte(utils.ColorizeError("You don't have that item.\n")))
-			}
+			mcp.HandleDrop(msg.Args, player, s)
+		case "mcp-examine":
+			mcp.HandleExamine(msg.Args, player, s)
 		case "mcp-look":
 			conn.Write([]byte(player.Look()))
 		case "mcp-go":
-			dir := msg.Args["dir"]
-			result, err := player.Move(dir)
-			if err != nil {
-				conn.Write([]byte(utils.ColorizeError(err.Error() + "\n")))
-			} else {
-				conn.Write([]byte(result))
-				conn.Write([]byte(player.Look()))
-			}
+			mcp.HandleGo(msg.Args, player, s)
+			/*
+				dir := msg.Args["dir"]
+				result, err := player.Move(dir)
+				if err != nil {
+					conn.Write([]byte(utils.ColorizeError(err.Error() + "\n")))
+				} else {
+					conn.Write([]byte(result))
+					conn.Write([]byte(player.Look()))
+				}*/
 		case "mcp-client":
 			if msg.Args["supports_ansi"] == "false" {
 				config.SupportsANSI = false

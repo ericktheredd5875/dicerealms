@@ -35,10 +35,14 @@ type RoomModel struct {
 
 type ItemModel struct {
 	gorm.Model
+	ItemID      string
 	Name        string
 	Description string
-	RoomID      int
-	RoomFound   RoomModel `gorm:"foreignKey:RoomID"`
+	Rarity      string
+	Effect      string
+	Category    string
+	RoomFoundID uint
+	// RoomFound   RoomModel `gorm:"foreignKey:RoomID"`
 }
 
 type SceneModel struct {

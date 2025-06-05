@@ -1,0 +1,702 @@
+[
+  {
+    "Name": "Flaming Salve",
+    "Description": "This item vibrates with power. The liquid within swirls mysteriously.",
+    "Rarity": "Very Rare",
+    "Effect": "Heals 1d4",
+    "Category": "Potion"
+  },
+  {
+    "Name": "Cursed Philter",
+    "Description": "This item is heavier than it looks. The liquid within swirls mysteriously.",
+    "Rarity": "Mundane",
+    "Effect": "Shield 2d6",
+    "Category": "Potion"
+  },
+  {
+    "Name": "Frozen Helm",
+    "Description": "This item vibrates with power. It seems to adjust itself to the wearer's form.",
+    "Rarity": "Legendary",
+    "Effect": "+1 AC",
+    "Category": "Armor"
+  },
+  {
+    "Name": "Ancient Staff",
+    "Description": "This item is covered in ancient runes. It feels well-balanced and ready to strike true.",
+    "Rarity": "Mundane",
+    "Effect": "2d8",
+    "Category": "Weapon"
+  },
+  {
+    "Name": "Shadow Rope",
+    "Description": "This item glows faintly with arcane energy. Essential for any seasoned traveler.",
+    "Rarity": "Common",
+    "Effect": "1d10 utility",
+    "Category": "Adventure Gear"
+  },
+  {
+    "Name": "Enchanted Horn",
+    "Description": "This item is heavier than it looks. A faint aura of magic surrounds it constantly.",
+    "Rarity": "Very Rare",
+    "Effect": "2d6 arcane",
+    "Category": "Wondrous Item"
+  },
+  {
+    "Name": "Gleaming Cloak",
+    "Description": "This item seems to whisper secrets. It seems to adjust itself to the wearer's form.",
+    "Rarity": "Rare",
+    "Effect": "+1 AC",
+    "Category": "Armor"
+  },
+  {
+    "Name": "Gleaming Philter",
+    "Description": "This item hums when near danger. The liquid within swirls mysteriously.",
+    "Rarity": "Rare",
+    "Effect": "Boosts 1d8",
+    "Category": "Potion"
+  },
+  {
+    "Name": "Frozen Dagger",
+    "Description": "This item vibrates with power. It feels well-balanced and ready to strike true.",
+    "Rarity": "Uncommon",
+    "Effect": "1d10",
+    "Category": "Weapon"
+  },
+  {
+    "Name": "Mystic Axe",
+    "Description": "This item hums when near danger. It feels well-balanced and ready to strike true.",
+    "Rarity": "Uncommon",
+    "Effect": "1d10",
+    "Category": "Weapon"
+  },
+  {
+    "Name": "Flaming Lock",
+    "Description": "This item is covered in ancient runes. Durable and reliable, it's clearly seen expert craftsmanship.",
+    "Rarity": "Uncommon",
+    "Effect": "2d4 success boost",
+    "Category": "Tool"
+  },
+  {
+    "Name": "Shadow Earring",
+    "Description": "This item is cold to the touch. Its surface pulses softly, as if alive.",
+    "Rarity": "Common",
+    "Effect": "1d10 enchant",
+    "Category": "Jewelry"
+  },
+  {
+    "Name": "Enchanted Salve",
+    "Description": "This item glows faintly with arcane energy. The liquid within swirls mysteriously.",
+    "Rarity": "Common",
+    "Effect": "Heals 1d4",
+    "Category": "Potion"
+  },
+  {
+    "Name": "Ancient Gauntlets",
+    "Description": "This item is heavier than it looks. It seems to adjust itself to the wearer's form.",
+    "Rarity": "Common",
+    "Effect": "+1 AC",
+    "Category": "Armor"
+  },
+  {
+    "Name": "Enchanted Horn",
+    "Description": "This item glows faintly with arcane energy. A faint aura of magic surrounds it constantly.",
+    "Rarity": "Rare",
+    "Effect": "1d8 special",
+    "Category": "Wondrous Item"
+  },
+  {
+    "Name": "Frozen Orb",
+    "Description": "This item glows faintly with arcane energy. A faint aura of magic surrounds it constantly.",
+    "Rarity": "Common",
+    "Effect": "1d10 unique",
+    "Category": "Wondrous Item"
+  },
+  {
+    "Name": "Flaming Backpack",
+    "Description": "This item glows faintly with arcane energy. Essential for any seasoned traveler.",
+    "Rarity": "Uncommon",
+    "Effect": "2d6 utility",
+    "Category": "Adventure Gear"
+  },
+  {
+    "Name": "Gleaming Lens",
+    "Description": "This item is cold to the touch. Durable and reliable, it's clearly seen expert craftsmanship.",
+    "Rarity": "Rare",
+    "Effect": "1d8 enhance",
+    "Category": "Tool"
+  },
+  {
+    "Name": "Whispering Wrench",
+    "Description": "This item sparkles with inner light. Durable and reliable, it's clearly seen expert craftsmanship.",
+    "Rarity": "Uncommon",
+    "Effect": "+1 to task",
+    "Category": "Tool"
+  },
+  {
+    "Name": "Enchanted Staff",
+    "Description": "This item is heavier than it looks. It feels well-balanced and ready to strike true.",
+    "Rarity": "Legendary",
+    "Effect": "2d6",
+    "Category": "Weapon"
+  },
+  {
+    "Name": "Frozen Stone",
+    "Description": "This item is cold to the touch. A faint aura of magic surrounds it constantly.",
+    "Rarity": "Rare",
+    "Effect": "1d10 unique",
+    "Category": "Wondrous Item"
+  },
+  {
+    "Name": "Whispering Lantern",
+    "Description": "This item sparkles with inner light. Essential for any seasoned traveler.",
+    "Rarity": "Uncommon",
+    "Effect": "1d4 bonus",
+    "Category": "Adventure Gear"
+  },
+  {
+    "Name": "Cursed Helm",
+    "Description": "This item vibrates with power. It seems to adjust itself to the wearer's form.",
+    "Rarity": "Very Rare",
+    "Effect": "+3 AC",
+    "Category": "Armor"
+  },
+  {
+    "Name": "Enchanted Pick",
+    "Description": "This item is cold to the touch. Durable and reliable, it's clearly seen expert craftsmanship.",
+    "Rarity": "Mundane",
+    "Effect": "1d6 assist",
+    "Category": "Tool"
+  },
+  {
+    "Name": "Gleaming Horn",
+    "Description": "This item vibrates with power. A faint aura of magic surrounds it constantly.",
+    "Rarity": "Very Rare",
+    "Effect": "2d6 arcane",
+    "Category": "Wondrous Item"
+  },
+  {
+    "Name": "Shadow Breastplate",
+    "Description": "This item is cold to the touch. It seems to adjust itself to the wearer's form.",
+    "Rarity": "Uncommon",
+    "Effect": "+2 AC",
+    "Category": "Armor"
+  },
+  {
+    "Name": "Whispering Orb",
+    "Description": "This item is cold to the touch. A faint aura of magic surrounds it constantly.",
+    "Rarity": "Uncommon",
+    "Effect": "3d6 legendary",
+    "Category": "Wondrous Item"
+  },
+  {
+    "Name": "Flaming Ring",
+    "Description": "This item glows faintly with arcane energy. Its surface pulses softly, as if alive.",
+    "Rarity": "Mundane",
+    "Effect": "1d4 magic resist",
+    "Category": "Jewelry"
+  },
+  {
+    "Name": "Mystic Philter",
+    "Description": "This item sparkles with inner light. The liquid within swirls mysteriously.",
+    "Rarity": "Uncommon",
+    "Effect": "Transform 1d10",
+    "Category": "Potion"
+  },
+  {
+    "Name": "Gleaming Lantern",
+    "Description": "This item hums when near danger. Essential for any seasoned traveler.",
+    "Rarity": "Common",
+    "Effect": "2d6 utility",
+    "Category": "Adventure Gear"
+  },
+  {
+    "Name": "Flaming Greaves",
+    "Description": "This item seems to whisper secrets. It seems to adjust itself to the wearer's form.",
+    "Rarity": "Uncommon",
+    "Effect": "Reflect 1d4",
+    "Category": "Armor"
+  },
+  {
+    "Name": "Divine Breastplate",
+    "Description": "This item hums when near danger. It seems to adjust itself to the wearer's form.",
+    "Rarity": "Uncommon",
+    "Effect": "Immunity 1d4 rounds",
+    "Category": "Armor"
+  },
+  {
+    "Name": "Gleaming Amulet",
+    "Description": "This item vibrates with power. Its surface pulses softly, as if alive.",
+    "Rarity": "Common",
+    "Effect": "1d8 aura",
+    "Category": "Jewelry"
+  },
+  {
+    "Name": "Divine Staff",
+    "Description": "This item is heavier than it looks. It feels well-balanced and ready to strike true.",
+    "Rarity": "Rare",
+    "Effect": "3d10",
+    "Category": "Weapon"
+  },
+  {
+    "Name": "Shadow Tonic",
+    "Description": "This item sparkles with inner light. The liquid within swirls mysteriously.",
+    "Rarity": "Uncommon",
+    "Effect": "Transform 1d10",
+    "Category": "Potion"
+  },
+  {
+    "Name": "Whispering Amulet",
+    "Description": "This item is covered in ancient runes. Its surface pulses softly, as if alive.",
+    "Rarity": "Common",
+    "Effect": "1d8 aura",
+    "Category": "Jewelry"
+  },
+  {
+    "Name": "Divine Helm",
+    "Description": "This item vibrates with power. It seems to adjust itself to the wearer's form.",
+    "Rarity": "Rare",
+    "Effect": "Reflect 1d4",
+    "Category": "Armor"
+  },
+  {
+    "Name": "Flaming Cloak",
+    "Description": "This item seems to whisper secrets. It seems to adjust itself to the wearer's form.",
+    "Rarity": "Common",
+    "Effect": "+2 AC",
+    "Category": "Armor"
+  },
+  {
+    "Name": "Divine Blade",
+    "Description": "This item glows faintly with arcane energy. It feels well-balanced and ready to strike true.",
+    "Rarity": "Very Rare",
+    "Effect": "1d4",
+    "Category": "Weapon"
+  },
+  {
+    "Name": "Enchanted Compass",
+    "Description": "This item is heavier than it looks. Essential for any seasoned traveler.",
+    "Rarity": "Legendary",
+    "Effect": "1d6 bonus",
+    "Category": "Adventure Gear"
+  },
+  {
+    "Name": "Cursed Salve",
+    "Description": "This item vibrates with power. The liquid within swirls mysteriously.",
+    "Rarity": "Legendary",
+    "Effect": "Transform 1d10",
+    "Category": "Potion"
+  },
+  {
+    "Name": "Gleaming Philter",
+    "Description": "This item hums when near danger. The liquid within swirls mysteriously.",
+    "Rarity": "Rare",
+    "Effect": "Regens 2d4",
+    "Category": "Potion"
+  },
+  {
+    "Name": "Flaming Lantern",
+    "Description": "This item is covered in ancient runes. Essential for any seasoned traveler.",
+    "Rarity": "Very Rare",
+    "Effect": "1d6 bonus",
+    "Category": "Adventure Gear"
+  },
+  {
+    "Name": "Gleaming Lantern",
+    "Description": "This item is covered in ancient runes. Essential for any seasoned traveler.",
+    "Rarity": "Rare",
+    "Effect": "1d8 bonus",
+    "Category": "Adventure Gear"
+  },
+  {
+    "Name": "Enchanted Map",
+    "Description": "This item hums when near danger. Essential for any seasoned traveler.",
+    "Rarity": "Common",
+    "Effect": "2d6 utility",
+    "Category": "Adventure Gear"
+  },
+  {
+    "Name": "Gleaming Pick",
+    "Description": "This item seems to whisper secrets. Durable and reliable, it's clearly seen expert craftsmanship.",
+    "Rarity": "Common",
+    "Effect": "+1 to task",
+    "Category": "Tool"
+  },
+  {
+    "Name": "Frozen Hammer",
+    "Description": "This item sparkles with inner light. It feels well-balanced and ready to strike true.",
+    "Rarity": "Uncommon",
+    "Effect": "1d10",
+    "Category": "Weapon"
+  },
+  {
+    "Name": "Ancient Staff",
+    "Description": "This item is heavier than it looks. It feels well-balanced and ready to strike true.",
+    "Rarity": "Uncommon",
+    "Effect": "1d4",
+    "Category": "Weapon"
+  },
+  {
+    "Name": "Gleaming Philter",
+    "Description": "This item hums when near danger. The liquid within swirls mysteriously.",
+    "Rarity": "Uncommon",
+    "Effect": "Shield 2d6",
+    "Category": "Potion"
+  },
+  {
+    "Name": "Shadow Talisman",
+    "Description": "This item sparkles with inner light. A faint aura of magic surrounds it constantly.",
+    "Rarity": "Common",
+    "Effect": "1d8 special",
+    "Category": "Wondrous Item"
+  },
+  {
+    "Name": "Gleaming Horn",
+    "Description": "This item glows faintly with arcane energy. A faint aura of magic surrounds it constantly.",
+    "Rarity": "Uncommon",
+    "Effect": "2d6 arcane",
+    "Category": "Wondrous Item"
+  },
+  {
+    "Name": "Divine Draught",
+    "Description": "This item is heavier than it looks. The liquid within swirls mysteriously.",
+    "Rarity": "Very Rare",
+    "Effect": "Regens 2d4",
+    "Category": "Potion"
+  },
+  {
+    "Name": "Cursed Wrench",
+    "Description": "This item glows faintly with arcane energy. Durable and reliable, it's clearly seen expert craftsmanship.",
+    "Rarity": "Uncommon",
+    "Effect": "+2 to task",
+    "Category": "Tool"
+  },
+  {
+    "Name": "Shadow Key",
+    "Description": "This item is heavier than it looks. A faint aura of magic surrounds it constantly.",
+    "Rarity": "Common",
+    "Effect": "2d6 arcane",
+    "Category": "Wondrous Item"
+  },
+  {
+    "Name": "Shadow Tinker Set",
+    "Description": "This item sparkles with inner light. Durable and reliable, it's clearly seen expert craftsmanship.",
+    "Rarity": "Common",
+    "Effect": "+2 to task",
+    "Category": "Tool"
+  },
+  {
+    "Name": "Flaming Map",
+    "Description": "This item is heavier than it looks. Essential for any seasoned traveler.",
+    "Rarity": "Very Rare",
+    "Effect": "2d6 utility",
+    "Category": "Adventure Gear"
+  },
+  {
+    "Name": "Ancient Orb",
+    "Description": "This item sparkles with inner light. A faint aura of magic surrounds it constantly.",
+    "Rarity": "Uncommon",
+    "Effect": "1d6 magic",
+    "Category": "Wondrous Item"
+  },
+  {
+    "Name": "Shadow Bracelet",
+    "Description": "This item is heavier than it looks. Its surface pulses softly, as if alive.",
+    "Rarity": "Uncommon",
+    "Effect": "2d6 empower",
+    "Category": "Jewelry"
+  },
+  {
+    "Name": "Divine Dagger",
+    "Description": "This item sparkles with inner light. It feels well-balanced and ready to strike true.",
+    "Rarity": "Legendary",
+    "Effect": "1d4",
+    "Category": "Weapon"
+  },
+  {
+    "Name": "Mystic Bracelet",
+    "Description": "This item glows faintly with arcane energy. Its surface pulses softly, as if alive.",
+    "Rarity": "Legendary",
+    "Effect": "2d6 empower",
+    "Category": "Jewelry"
+  },
+  {
+    "Name": "Shadow Stone",
+    "Description": "This item is heavier than it looks. A faint aura of magic surrounds it constantly.",
+    "Rarity": "Uncommon",
+    "Effect": "1d6 magic",
+    "Category": "Wondrous Item"
+  },
+  {
+    "Name": "Mystic Pendant",
+    "Description": "This item hums when near danger. Its surface pulses softly, as if alive.",
+    "Rarity": "Very Rare",
+    "Effect": "2d6 empower",
+    "Category": "Jewelry"
+  },
+  {
+    "Name": "Shadow Horn",
+    "Description": "This item sparkles with inner light. A faint aura of magic surrounds it constantly.",
+    "Rarity": "Common",
+    "Effect": "2d6 arcane",
+    "Category": "Wondrous Item"
+  },
+  {
+    "Name": "Frozen Earring",
+    "Description": "This item seems to whisper secrets. Its surface pulses softly, as if alive.",
+    "Rarity": "Rare",
+    "Effect": "1d8 aura",
+    "Category": "Jewelry"
+  },
+  {
+    "Name": "Divine Lantern",
+    "Description": "This item glows faintly with arcane energy. Essential for any seasoned traveler.",
+    "Rarity": "Very Rare",
+    "Effect": "1d10 utility",
+    "Category": "Adventure Gear"
+  },
+  {
+    "Name": "Shadow Hammer",
+    "Description": "This item glows faintly with arcane energy. Durable and reliable, it's clearly seen expert craftsmanship.",
+    "Rarity": "Uncommon",
+    "Effect": "+2 to task",
+    "Category": "Tool"
+  },
+  {
+    "Name": "Flaming Helm",
+    "Description": "This item seems to whisper secrets. It seems to adjust itself to the wearer's form.",
+    "Rarity": "Legendary",
+    "Effect": "Immunity 1d4 rounds",
+    "Category": "Armor"
+  },
+  {
+    "Name": "Enchanted Pendant",
+    "Description": "This item seems to whisper secrets. Its surface pulses softly, as if alive.",
+    "Rarity": "Uncommon",
+    "Effect": "2d6 empower",
+    "Category": "Jewelry"
+  },
+  {
+    "Name": "Gleaming Draught",
+    "Description": "This item is covered in ancient runes. The liquid within swirls mysteriously.",
+    "Rarity": "Rare",
+    "Effect": "Regens 2d4",
+    "Category": "Potion"
+  },
+  {
+    "Name": "Cursed Earring",
+    "Description": "This item hums when near danger. Its surface pulses softly, as if alive.",
+    "Rarity": "Common",
+    "Effect": "1d10 enchant",
+    "Category": "Jewelry"
+  },
+  {
+    "Name": "Enchanted Bracelet",
+    "Description": "This item sparkles with inner light. Its surface pulses softly, as if alive.",
+    "Rarity": "Very Rare",
+    "Effect": "1d10 enchant",
+    "Category": "Jewelry"
+  },
+  {
+    "Name": "Enchanted Helm",
+    "Description": "This item is cold to the touch. It seems to adjust itself to the wearer's form.",
+    "Rarity": "Uncommon",
+    "Effect": "+2 AC",
+    "Category": "Armor"
+  },
+  {
+    "Name": "Frozen Amulet",
+    "Description": "This item is cold to the touch. Its surface pulses softly, as if alive.",
+    "Rarity": "Rare",
+    "Effect": "1d4 magic resist",
+    "Category": "Jewelry"
+  },
+  {
+    "Name": "Enchanted Mirror",
+    "Description": "This item is cold to the touch. A faint aura of magic surrounds it constantly.",
+    "Rarity": "Mundane",
+    "Effect": "2d6 arcane",
+    "Category": "Wondrous Item"
+  },
+  {
+    "Name": "Frozen Lantern",
+    "Description": "This item glows faintly with arcane energy. Essential for any seasoned traveler.",
+    "Rarity": "Mundane",
+    "Effect": "1d8 bonus",
+    "Category": "Adventure Gear"
+  },
+  {
+    "Name": "Shadow Compass",
+    "Description": "This item seems to whisper secrets. Essential for any seasoned traveler.",
+    "Rarity": "Common",
+    "Effect": "1d6 bonus",
+    "Category": "Adventure Gear"
+  },
+  {
+    "Name": "Whispering Backpack",
+    "Description": "This item is covered in ancient runes. Essential for any seasoned traveler.",
+    "Rarity": "Rare",
+    "Effect": "2d6 utility",
+    "Category": "Adventure Gear"
+  },
+  {
+    "Name": "Enchanted Philter",
+    "Description": "This item sparkles with inner light. The liquid within swirls mysteriously.",
+    "Rarity": "Mundane",
+    "Effect": "Boosts 1d8",
+    "Category": "Potion"
+  },
+  {
+    "Name": "Enchanted Staff",
+    "Description": "This item vibrates with power. It feels well-balanced and ready to strike true.",
+    "Rarity": "Common",
+    "Effect": "1d4",
+    "Category": "Weapon"
+  },
+  {
+    "Name": "Gleaming Amulet",
+    "Description": "This item hums when near danger. Its surface pulses softly, as if alive.",
+    "Rarity": "Legendary",
+    "Effect": "2d6 empower",
+    "Category": "Jewelry"
+  },
+  {
+    "Name": "Gleaming Lock",
+    "Description": "This item vibrates with power. Durable and reliable, it's clearly seen expert craftsmanship.",
+    "Rarity": "Uncommon",
+    "Effect": "1d6 assist",
+    "Category": "Tool"
+  },
+  {
+    "Name": "Shadow Lock",
+    "Description": "This item sparkles with inner light. Durable and reliable, it's clearly seen expert craftsmanship.",
+    "Rarity": "Uncommon",
+    "Effect": "1d8 enhance",
+    "Category": "Tool"
+  },
+  {
+    "Name": "Mystic Gauntlets",
+    "Description": "This item seems to whisper secrets. It seems to adjust itself to the wearer's form.",
+    "Rarity": "Uncommon",
+    "Effect": "+2 AC",
+    "Category": "Armor"
+  },
+  {
+    "Name": "Divine Bow",
+    "Description": "This item vibrates with power. It feels well-balanced and ready to strike true.",
+    "Rarity": "Common",
+    "Effect": "2d8",
+    "Category": "Weapon"
+  },
+  {
+    "Name": "Frozen Map",
+    "Description": "This item is cold to the touch. Essential for any seasoned traveler.",
+    "Rarity": "Rare",
+    "Effect": "1d8 bonus",
+    "Category": "Adventure Gear"
+  },
+  {
+    "Name": "Divine Bow",
+    "Description": "This item is heavier than it looks. It feels well-balanced and ready to strike true.",
+    "Rarity": "Uncommon",
+    "Effect": "1d6",
+    "Category": "Weapon"
+  },
+  {
+    "Name": "Whispering Draught",
+    "Description": "This item sparkles with inner light. The liquid within swirls mysteriously.",
+    "Rarity": "Mundane",
+    "Effect": "Transform 1d10",
+    "Category": "Potion"
+  },
+  {
+    "Name": "Frozen Tinker Set",
+    "Description": "This item is heavier than it looks. Durable and reliable, it's clearly seen expert craftsmanship.",
+    "Rarity": "Rare",
+    "Effect": "+1 to task",
+    "Category": "Tool"
+  },
+  {
+    "Name": "Enchanted Tinker Set",
+    "Description": "This item glows faintly with arcane energy. Durable and reliable, it's clearly seen expert craftsmanship.",
+    "Rarity": "Legendary",
+    "Effect": "+2 to task",
+    "Category": "Tool"
+  },
+  {
+    "Name": "Gleaming Bracelet",
+    "Description": "This item is covered in ancient runes. Its surface pulses softly, as if alive.",
+    "Rarity": "Uncommon",
+    "Effect": "1d10 enchant",
+    "Category": "Jewelry"
+  },
+  {
+    "Name": "Divine Spear",
+    "Description": "This item vibrates with power. It feels well-balanced and ready to strike true.",
+    "Rarity": "Common",
+    "Effect": "3d10",
+    "Category": "Weapon"
+  },
+  {
+    "Name": "Cursed Wrench",
+    "Description": "This item is cold to the touch. Durable and reliable, it's clearly seen expert craftsmanship.",
+    "Rarity": "Rare",
+    "Effect": "1d8 enhance",
+    "Category": "Tool"
+  },
+  {
+    "Name": "Whispering Crown",
+    "Description": "This item is heavier than it looks. Its surface pulses softly, as if alive.",
+    "Rarity": "Uncommon",
+    "Effect": "1d8 aura",
+    "Category": "Jewelry"
+  },
+  {
+    "Name": "Frozen Shield",
+    "Description": "This item vibrates with power. It seems to adjust itself to the wearer's form.",
+    "Rarity": "Uncommon",
+    "Effect": "+1 AC",
+    "Category": "Armor"
+  },
+  {
+    "Name": "Enchanted Pendant",
+    "Description": "This item sparkles with inner light. Its surface pulses softly, as if alive.",
+    "Rarity": "Rare",
+    "Effect": "2d6 empower",
+    "Category": "Jewelry"
+  },
+  {
+    "Name": "Enchanted Helm",
+    "Description": "This item vibrates with power. It seems to adjust itself to the wearer's form.",
+    "Rarity": "Uncommon",
+    "Effect": "+2 AC",
+    "Category": "Armor"
+  },
+  {
+    "Name": "Flaming Bow",
+    "Description": "This item is covered in ancient runes. It feels well-balanced and ready to strike true.",
+    "Rarity": "Rare",
+    "Effect": "2d6",
+    "Category": "Weapon"
+  },
+  {
+    "Name": "Frozen Pendant",
+    "Description": "This item sparkles with inner light. Its surface pulses softly, as if alive.",
+    "Rarity": "Common",
+    "Effect": "1d10 enchant",
+    "Category": "Jewelry"
+  },
+  {
+    "Name": "Flaming Breastplate",
+    "Description": "This item glows faintly with arcane energy. It seems to adjust itself to the wearer's form.",
+    "Rarity": "Uncommon",
+    "Effect": "Immunity 1d4 rounds",
+    "Category": "Armor"
+  },
+  {
+    "Name": "Ancient Shield",
+    "Description": "This item sparkles with inner light. It seems to adjust itself to the wearer's form.",
+    "Rarity": "Rare",
+    "Effect": "+3 AC",
+    "Category": "Armor"
+  }
+]
