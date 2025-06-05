@@ -2,7 +2,6 @@ package session
 
 import (
 	"bufio"
-	"log"
 
 	"github.com/ericktheredd5875/dicerealms/internal/game"
 	"github.com/ericktheredd5875/dicerealms/internal/netiface"
@@ -30,7 +29,7 @@ func (s *Session) Send(msg string) {
 }
 
 func (s *Session) Close() {
-	log.Printf("SessionClose-Player: %+v", s.Player)
+	// log.Printf("SessionClose-Player: %+v", s.Player)
 	if s.Player != nil {
 		s.Send(utils.ColorizeInfo("!!Farewell, travler.... Come Again!!") + "\n")
 		s.Player.Save()

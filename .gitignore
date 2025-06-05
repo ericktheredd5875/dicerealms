@@ -35,3 +35,6 @@ scenes/*
 
 # Logs
 logs/scenes/*.txt
+
+# Held Files
+*.hold
